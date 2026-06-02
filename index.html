@@ -474,8 +474,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <div class="field">
         <label class="field-label">Model</label>
         <select class="field-input field-select" id="modal-model">
-          <option value="claude-sonnet-4-6">Claude Sonnet 4.6 — Recommended</option>
-          <option value="claude-opus-4-8">Claude Opus 4.8 — Most thorough</option>
+          <option value="claude-sonnet-4-5-20251001">Claude Sonnet 4.5 — Recommended</option>
+          <option value="claude-opus-4-5-20251101">Claude Opus 4.5 — Most thorough</option>
           <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest</option>
         </select>
       </div>
@@ -516,7 +516,7 @@ function updateApiPill(ready) {
 }
 function openApiModal() {
   const k = localStorage.getItem('tonik_api_key') || '';
-  const m = localStorage.getItem('tonik_model') || 'claude-sonnet-4-6';
+  const m = localStorage.getItem('tonik_model') || 'claude-sonnet-4-5-20251001';
   document.getElementById('modal-api-key').value = k;
   document.getElementById('modal-model').value = m;
   document.getElementById('api-modal').style.display = 'flex';
@@ -599,7 +599,7 @@ async function generate() {
     prompt = makeUpdatePrompt({ existing: S.fileContent, changes, context: document.getElementById('u-context').value.trim(), scope: document.getElementById('u-scope').value });
   }
 
-  const model = localStorage.getItem('tonik_model') || 'claude-sonnet-4-6';
+  const model = localStorage.getItem('tonik_model') || 'claude-sonnet-4-5-20251001';
   S.generating = true; S.content = '';
   const btn = document.getElementById('btn-gen');
   btn.disabled = true;
@@ -615,7 +615,11 @@ async function generate() {
       headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', 'anthropic-dangerous-allow-browser': 'true' },
       body: JSON.stringify({ model, max_tokens: 8192, stream: true, system: SYSTEM_PROMPT, messages: [{ role: 'user', content: prompt }] }),
     });
-    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error?.message || `API ${res.status}`); }
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      const msg = errBody.error?.message || `HTTP ${res.status} — ${res.statusText}`;
+      throw new Error(msg);
+    }
 
     const reader = res.body.getReader();
     const dec = new TextDecoder();
@@ -643,8 +647,19 @@ async function generate() {
     document.getElementById('output-actions').style.display = 'flex';
     toast('PRD generated successfully!', 'success');
   } catch (e) {
-    toast('Error: ' + e.message, 'error');
-    document.getElementById('output-body').innerHTML = `<div class="empty-state"><div class="empty-state-title" style="color:var(--danger)">Generation Failed</div><div class="empty-state-sub">${esc(e.message)}</div></div>`;
+    const errMsg = e.message || 'Unknown error';
+    toast('Error: ' + errMsg, 'error', 8000);
+    document.getElementById('output-body').innerHTML = `
+      <div class="empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="empty-state-title" style="color:var(--danger)">Generation Failed</div>
+        <div class="empty-state-sub" style="color:var(--danger);background:var(--danger-light);padding:10px 16px;border-radius:6px;border:1px solid #fca5a5;font-family:monospace;font-size:12px;text-align:left;max-width:480px">${esc(errMsg)}</div>
+        <div class="empty-state-sub">Common fixes:<br>
+          • Make sure your API key is set (click the lock icon top-right)<br>
+          • Check your Anthropic account has credits<br>
+          • Try again — sometimes the API times out
+        </div>
+      </div>`;
   } finally {
     S.generating = false;
     btn.disabled = false;
@@ -831,6 +846,12 @@ document.getElementById('modal-api-key').addEventListener('keydown', e => { if (
 
 // ── Init ──
 loadPrefs();
+// Show prompt if no API key on first visit
+if (!localStorage.getItem('tonik_api_key')) {
+  setTimeout(() => {
+    toast('👋 First time? Click the lock icon (top right) to set your Anthropic API key.', 'info', 8000);
+  }, 800);
+}
 </script>
 </body>
 </html>
