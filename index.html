@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tonik PRD Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #1A4FD8; --primary-dark: #1340B0; --primary-light: #eff6ff; --primary-mid: #dbeafe;
+  --success: #16a34a; --success-light: #dcfce7;
+  --danger: #dc2626; --danger-light: #fee2e2;
+  --warning: #d97706; --warning-light: #fef3c7;
+  --bg: #f1f5f9; --card: #ffffff; --border: #e2e8f0; --border-dark: #cbd5e1;
+  --text: #1e293b; --muted: #64748b; --subtle: #94a3b8;
+  --radius: 12px; --radius-sm: 7px;
+}
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
+
+/* ── Header ── */
+.header {
+  background: linear-gradient(135deg, #1340B0 0%, #1A4FD8 60%, #2563eb 100%);
+  color: #fff; padding: 0 28px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(26,79,216,.35); position: sticky; top: 0; z-index: 50;
+}
+.header-brand { display: flex; align-items: center; gap: 12px; }
+.header-logo {
+  width: 34px; height: 34px; background: rgba(255,255,255,.18);
+  border: 1.5px solid rgba(255,255,255,.3); border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 900; font-size: 14px; letter-spacing: -1px;
+}
+.header-title { font-size: 17px; font-weight: 800; }
+.header-sub { font-size: 11px; opacity: .6; margin-top: 1px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.api-key-pill {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+  border-radius: 20px; padding: 5px 14px; cursor: pointer;
+  font-size: 12px; transition: background .15s;
+}
+.api-key-pill:hover { background: rgba(255,255,255,.22); }
+.api-dot { width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
+.api-dot.ready { background: #4ade80; }
+
+/* ── Hero / Mode selector ── */
+.hero { background: var(--card); border-bottom: 1px solid var(--border); padding: 20px 28px; }
+.hero-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 12px; }
+.mode-cards { display: flex; gap: 12px; }
+.mode-card {
+  flex: 1; max-width: 260px; padding: 14px 18px; border: 2px solid var(--border);
+  border-radius: var(--radius); cursor: pointer; transition: all .18s; background: var(--bg);
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.mode-card:hover { border-color: var(--primary); background: var(--primary-light); }
+.mode-card.active { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 3px rgba(26,79,216,.1); }
+.mode-card-icon {
+  width: 36px; height: 36px; border-radius: 8px; background: var(--primary-mid);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  color: var(--primary);
+}
+.mode-card.active .mode-card-icon { background: var(--primary); color: #fff; }
+.mode-card-label { font-size: 14px; font-weight: 700; color: var(--text); }
+.mode-card-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+
+/* ── Main layout ── */
+.workspace { display: grid; grid-template-columns: 420px 1fr; gap: 0; height: calc(100vh - 60px - 97px); }
+@media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } }
+
+/* ── Input panel ── */
+.input-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.input-panel-scroll { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.section-head { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field-label { font-size: 12px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 5px; }
+.field-label .req { color: var(--danger); }
+.field-hint { font-size: 11px; color: var(--muted); line-height: 1.4; }
+.field-input {
+  padding: 9px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 13px; background: #fff; color: var(--text); width: 100%;
+  transition: border-color .15s, box-shadow .15s; font-family: inherit;
+}
+.field-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,79,216,.08); }
+.field-input::placeholder { color: var(--subtle); }
+.field-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.field-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; cursor: pointer;
+}
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Upload zone */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px 16px;
+  text-align: center; cursor: pointer; transition: all .2s; background: var(--bg);
+}
+.upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: var(--primary-light); }
+.upload-zone input { display: none; }
+.upload-zone-icon { color: var(--subtle); margin-bottom: 8px; }
+.upload-zone-text { font-size: 13px; color: var(--muted); }
+.upload-zone-text strong { color: var(--primary); }
+.uploaded-file {
+  background: var(--primary-light); border: 1.5px solid var(--primary-mid);
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.uploaded-file-icon { color: var(--primary); flex-shrink: 0; }
+.uploaded-file-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; word-break: break-all; }
+.uploaded-file-size { font-size: 11px; color: var(--muted); }
+.btn-remove { background: none; border: none; color: var(--muted); cursor: pointer; padding: 2px; border-radius: 4px; }
+.btn-remove:hover { color: var(--danger); background: var(--danger-light); }
+
+/* Panel footer */
+.input-footer { padding: 14px 20px; border-top: 1px solid var(--border); background: var(--card); flex-shrink: 0; }
+.btn-generate {
+  width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none;
+  border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: background .15s, transform .1s; letter-spacing: .2px;
+}
+.btn-generate:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
+.btn-generate:active:not(:disabled) { transform: translateY(0); }
+.btn-generate:disabled { background: var(--subtle); cursor: not-allowed; transform: none; }
+.spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Output panel ── */
+.output-panel { display: flex; flex-direction: column; overflow: hidden; background: var(--card); }
+
+.output-bar {
+  padding: 0 16px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0; background: var(--card); flex-shrink: 0; min-height: 46px;
+}
+.out-tab { padding: 12px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); transition: all .15s; white-space: nowrap; }
+.out-tab:hover { color: var(--primary); }
+.out-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.output-actions { margin-left: auto; display: flex; gap: 7px; align-items: center; }
+.btn-sm {
+  padding: 6px 13px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700;
+  cursor: pointer; border: 1.5px solid var(--border); background: #fff; color: var(--text);
+  transition: all .15s; display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.btn-sm:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.btn-sm.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-sm.primary:hover { background: var(--primary-dark); }
+.btn-sm:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
+
+/* Streaming bar */
+.streaming-bar {
+  padding: 8px 16px; background: var(--primary-light); border-bottom: 1px solid var(--primary-mid);
+  display: flex; align-items: center; gap: 9px; font-size: 12px; color: var(--primary); flex-shrink: 0;
+}
+.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); animation: pulse .9s ease-in-out infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(.7); } }
+
+.output-body { flex: 1; overflow-y: auto; }
+
+/* Empty state */
+.empty-state {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 100%; gap: 14px; padding: 40px; text-align: center;
+}
+.empty-state-icon { color: var(--border-dark); }
+.empty-state-title { font-size: 16px; font-weight: 700; color: var(--text); }
+.empty-state-sub { font-size: 13px; color: var(--muted); max-width: 340px; line-height: 1.6; }
+.empty-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; text-align: left; }
+.empty-step { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--muted); }
+.empty-step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--primary-mid); color: var(--primary); font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+
+/* Preview */
+.preview-wrap { padding: 32px 44px; max-width: 820px; margin: 0 auto; }
+.preview-wrap h1 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; padding-bottom: 14px; border-bottom: 3px solid var(--primary); }
+.preview-wrap h2 { font-size: 16px; font-weight: 700; color: var(--primary-dark); margin: 24px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+.preview-wrap h3 { font-size: 14px; font-weight: 700; color: var(--text); margin: 16px 0 6px; }
+.preview-wrap h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin: 12px 0 4px; }
+.preview-wrap p { line-height: 1.7; margin-bottom: 9px; }
+.preview-wrap ul, .preview-wrap ol { padding-left: 22px; margin-bottom: 10px; }
+.preview-wrap li { line-height: 1.7; margin-bottom: 3px; }
+.preview-wrap table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.preview-wrap th { background: var(--primary-light); color: var(--primary-dark); font-weight: 700; padding: 9px 13px; border: 1px solid var(--border); text-align: left; font-size: 12px; }
+.preview-wrap td { padding: 8px 13px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+.preview-wrap tr:nth-child(even) td { background: #f8fafc; }
+.preview-wrap code { background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 12px; font-family: 'Cascadia Code', 'Fira Code', monospace; }
+.preview-wrap pre { background: #f1f5f9; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; overflow-x: auto; margin: 10px 0; }
+.preview-wrap pre code { background: none; border: none; padding: 0; }
+.preview-wrap blockquote { border-left: 3px solid var(--primary); padding: 8px 14px; background: var(--primary-light); margin: 10px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--primary-dark); }
+.preview-wrap hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+
+/* Raw */
+.raw-wrap { padding: 16px; height: 100%; display: flex; flex-direction: column; }
+.raw-wrap textarea {
+  flex: 1; width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px; line-height: 1.65; background: #f8fafc; resize: none; color: var(--text);
+}
+.raw-wrap textarea:focus { outline: none; border-color: var(--primary); }
+
+/* API key modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 200;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  backdrop-filter: blur(2px);
+}
+.modal {
+  background: #fff; border-radius: var(--radius); box-shadow: 0 25px 60px rgba(0,0,0,.22);
+  width: 100%; max-width: 440px; overflow: hidden;
+}
+.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+.modal-title { font-size: 16px; font-weight: 800; }
+.modal-sub { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+.modal-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+.modal-footer { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+.btn-primary { padding: 9px 20px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-ghost { padding: 9px 16px; background: #fff; color: var(--text); border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-ghost:hover { background: var(--bg); }
+
+/* Toast */
+.toast-wrap { position: fixed; bottom: 22px; right: 22px; z-index: 300; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast {
+  padding: 11px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+  box-shadow: 0 4px 20px rgba(0,0,0,.14); display: flex; align-items: center; gap: 9px;
+  animation: toastIn .22s ease; max-width: 380px; pointer-events: all;
+}
+@keyframes toastIn { from { transform: translateX(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.toast.success { background: var(--success-light); color: var(--success); border: 1px solid #86efac; }
+.toast.error   { background: var(--danger-light);  color: var(--danger);  border: 1px solid #fca5a5; }
+.toast.info    { background: var(--primary-light); color: var(--primary); border: 1px solid #93c5fd; }
+
+/* Scroll */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-brand">
+    <div class="header-logo">T</div>
+    <div>
+      <div class="header-title">PRD Portal</div>
+      <div class="header-sub">Tonik Financial · Powered by Claude AI</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="api-key-pill" onclick="openApiModal()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <span id="api-pill-text">Set API Key</span>
+      <div class="api-dot" id="api-dot"></div>
+    </div>
+  </div>
+</header>
+
+<!-- Mode selector -->
+<div class="hero">
+  <div class="hero-title">What would you like to do?</div>
+  <div class="mode-cards">
+    <div class="mode-card active" id="card-create" onclick="switchMode('create')">
+      <div class="mode-card-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+      <div>
+        <div class="mode-card-label">Create New PRD</div>
+        <div class="mode-card-desc">Draft a complete Tonik PRD from scratch using Claude AI</div>
+      </div>
+    </div>
+    <div class="mode-card" id="card-update" onclick="switchMode('update')">
+      <div class="mode-card-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+      </div>
+      <div>
+        <div class="mode-card-label">Update Existing PRD</div>
+        <div class="mode-card-desc">Upload a PRD file and revise it with new context</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Workspace -->
+<div class="workspace">
+
+  <!-- Input panel -->
+  <div class="input-panel">
+    <div class="input-panel-scroll" id="input-scroll">
+
+      <!-- CREATE form -->
+      <div id="form-create">
+        <div class="section-head">Feature Details</div>
+
+        <div class="field">
+          <label class="field-label">Feature / Product Name <span class="req">*</span></label>
+          <input class="field-input" type="text" id="c-name" placeholder="e.g. Loan Restructuring Self-Service" maxlength="120">
+        </div>
+
+        <div class="row-2">
+          <div class="field">
+            <label class="field-label">Product Area</label>
+            <select class="field-input field-select" id="c-area">
+              <option value="">Select area</option>
+              <option>Loans</option><option>Savings</option><option>Payments</option>
+              <option>Onboarding</option><option>Authentication</option><option>Dashboard</option>
+              <option>Notifications</option><option>Customer Support</option>
+              <option>Compliance / KYC</option><option>Analytics</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="field-label">Priority</label>
+            <select class="field-input field-select" id="c-priority">
+              <option value="P0 – Critical">P0 – Critical</option>
+              <option value="P1 – High" selected>P1 – High</option>
+              <option value="P2 – Medium">P2 – Medium</option>
+              <option value="P3 – Low">P3 – Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Problem Statement <span class="req">*</span></label>
+          <div class="field-hint">What problem are we solving? Who is affected and what is the business impact?</div>
+          <textarea class="field-input field-textarea" id="c-problem" rows="4"
+            placeholder="e.g. Customers with overdue loans have no self-service option to request restructuring, leading to high call center volumes and increased default risk..."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Goals &amp; Success Metrics</label>
+          <div class="field-hint">What does success look like? Include KPI targets if known.</div>
+          <textarea class="field-input field-textarea" id="c-goals" rows="3"
+            placeholder="e.g. Reduce loan defaults by 15%, deflect 30% of restructuring calls to self-service, NPS improvement..."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Target Users</label>
+          <input class="field-input" type="text" id="c-users"
+            placeholder="e.g. Tonik borrowers with active loans, 25–45 age, mobile-first">
+        </div>
+
+        <div class="field">
+          <label class="field-label">Key Requirements / Features</label>
+          <div class="field-hint">List the main capabilities, one per line.</div>
+          <textarea class="field-input field-textarea" id="c-requirements" rows="5"
+            placeholder="- View loan details and overdue status&#10;- Submit restructuring request&#10;- OTP verification&#10;- Real-time status tracking&#10;- Agent review workflow"></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Technical Context / Constraints</label>
+          <textarea class="field-input field-textarea" id="c-tech" rows="2"
+            placeholder="e.g. Must use existing Loan API, Android/iOS only, no web support..."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Additional Context</label>
+          <textarea class="field-input field-textarea" id="c-context" rows="3"
+            placeholder="Stakeholder inputs, regulatory requirements, research findings, competitive context..."></textarea>
+        </div>
+      </div>
+
+      <!-- UPDATE form -->
+      <div id="form-update" style="display:none">
+        <div class="section-head">Upload Existing PRD</div>
+
+        <div id="upload-area">
+          <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <input type="file" id="file-input" accept=".md,.markdown,.txt,.docx" onchange="onFileSelect(event)">
+            <div class="upload-zone-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+            </div>
+            <div class="upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop</div>
+            <div style="font-size:11px;color:var(--subtle);margin-top:4px">.md · .txt · .docx</div>
+          </div>
+          <div id="file-info" style="display:none" class="uploaded-file">
+            <svg class="uploaded-file-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <div>
+              <div class="uploaded-file-name" id="file-name">—</div>
+              <div class="uploaded-file-size" id="file-size">—</div>
+            </div>
+            <button class="btn-remove" onclick="clearFile()" title="Remove file">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:4px">
+          <label class="field-label">What to Update <span class="req">*</span></label>
+          <div class="field-hint">Describe changes, new sections, corrections, or additions needed.</div>
+          <textarea class="field-input field-textarea" id="u-changes" rows="5"
+            placeholder="e.g. Add fraud detection requirements to Section 6, update success metrics to reflect new OKRs, revise the out-of-scope section to exclude web support..."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">New Context / Information</label>
+          <div class="field-hint">Paste meeting notes, research, stakeholder feedback, or regulatory updates.</div>
+          <textarea class="field-input field-textarea" id="u-context" rows="4"
+            placeholder="Meeting notes, new requirements, user research findings, compliance updates..."></textarea>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Update Scope</label>
+          <select class="field-input field-select" id="u-scope">
+            <option value="targeted">Targeted — update only the specified sections</option>
+            <option value="full">Full revision — rewrite with all changes integrated</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Generate button -->
+    <div class="input-footer">
+      <button class="btn-generate" id="btn-gen" onclick="generate()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <span id="gen-label">Generate PRD</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Output panel -->
+  <div class="output-panel">
+    <div id="streaming-bar" class="streaming-bar" style="display:none">
+      <div class="pulse-dot"></div>
+      <span id="streaming-msg">Generating PRD with Claude AI...</span>
+    </div>
+    <div class="output-bar">
+      <div class="out-tab active" id="tab-preview" onclick="switchTab('preview')">Preview</div>
+      <div class="out-tab" id="tab-raw" onclick="switchTab('raw')">Markdown</div>
+      <div class="output-actions" id="output-actions" style="display:none">
+        <button class="btn-sm" onclick="copyMarkdown()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy
+        </button>
+        <button class="btn-sm primary" onclick="downloadMd()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download .md
+        </button>
+      </div>
+    </div>
+    <div class="output-body" id="output-body">
+      <div class="empty-state" id="empty-state">
+        <svg class="empty-state-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+        </svg>
+        <div class="empty-state-title">Your PRD will appear here</div>
+        <div class="empty-state-sub">Fill in the form and click <strong>Generate PRD</strong> to draft a complete Tonik-format PRD with Claude AI.</div>
+        <div class="empty-steps">
+          <div class="empty-step"><div class="empty-step-num">1</div><span>Set your Anthropic API key (top right)</span></div>
+          <div class="empty-step"><div class="empty-step-num">2</div><span>Choose Create or Update mode</span></div>
+          <div class="empty-step"><div class="empty-step-num">3</div><span>Fill in the details and generate</span></div>
+          <div class="empty-step"><div class="empty-step-num">4</div><span>Download the finished .md file</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- API Key Modal -->
+<div class="modal-overlay" id="api-modal" style="display:none" onclick="closeApiModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">Anthropic API Key</div>
+      <div class="modal-sub">Your key is stored only in your browser (localStorage) and is never sent anywhere except the Anthropic API.</div>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="field-label">API Key</label>
+        <input class="field-input" type="password" id="modal-api-key" placeholder="sk-ant-api03-..." autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="field-label">Model</label>
+        <select class="field-input field-select" id="modal-model">
+          <option value="claude-sonnet-4-6">Claude Sonnet 4.6 — Recommended</option>
+          <option value="claude-opus-4-8">Claude Opus 4.8 — Most thorough</option>
+          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-ghost" onclick="closeApiModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveApiKey()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+// ── State ──
+const S = { mode: 'create', tab: 'preview', content: '', fileContent: '', fileName: '', generating: false };
+
+// ── Persist ──
+function loadPrefs() {
+  const k = localStorage.getItem('tonik_api_key');
+  const m = localStorage.getItem('tonik_model');
+  if (k) { document.getElementById('modal-api-key').value = k; updateApiPill(true); }
+  if (m) document.getElementById('modal-model').value = m;
+}
+function saveApiKey() {
+  const k = document.getElementById('modal-api-key').value.trim();
+  const m = document.getElementById('modal-model').value;
+  localStorage.setItem('tonik_api_key', k);
+  localStorage.setItem('tonik_model', m);
+  updateApiPill(!!k);
+  closeApiModal();
+  toast('API key saved', 'success');
+}
+function updateApiPill(ready) {
+  document.getElementById('api-pill-text').textContent = ready ? 'API Key Set' : 'Set API Key';
+  document.getElementById('api-dot').className = 'api-dot' + (ready ? ' ready' : '');
+}
+function openApiModal() {
+  const k = localStorage.getItem('tonik_api_key') || '';
+  const m = localStorage.getItem('tonik_model') || 'claude-sonnet-4-6';
+  document.getElementById('modal-api-key').value = k;
+  document.getElementById('modal-model').value = m;
+  document.getElementById('api-modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('modal-api-key').focus(), 50);
+}
+function closeApiModal(e) {
+  if (!e || e.target === document.getElementById('api-modal'))
+    document.getElementById('api-modal').style.display = 'none';
+}
+
+// ── Mode ──
+function switchMode(m) {
+  S.mode = m;
+  document.getElementById('card-create').classList.toggle('active', m === 'create');
+  document.getElementById('card-update').classList.toggle('active', m === 'update');
+  document.getElementById('form-create').style.display = m === 'create' ? 'block' : 'none';
+  document.getElementById('form-update').style.display = m === 'update' ? 'block' : 'none';
+  document.getElementById('gen-label').textContent = m === 'create' ? 'Generate PRD' : 'Update PRD';
+}
+
+// ── Output tabs ──
+function switchTab(t) {
+  S.tab = t;
+  document.getElementById('tab-preview').classList.toggle('active', t === 'preview');
+  document.getElementById('tab-raw').classList.toggle('active', t === 'raw');
+  renderOutput();
+}
+function renderOutput() {
+  if (!S.content) return;
+  const el = document.getElementById('output-body');
+  if (S.tab === 'preview') {
+    el.innerHTML = `<div class="preview-wrap">${marked.parse(S.content)}</div>`;
+  } else {
+    el.innerHTML = `<div class="raw-wrap"><textarea spellcheck="false" oninput="S.content=this.value">${esc(S.content)}</textarea></div>`;
+  }
+}
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── File upload ──
+function onDragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
+function onDragLeave(e) { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function onDrop(e) { e.preventDefault(); onDragLeave(); const f = e.dataTransfer.files[0]; if (f) readFile(f); }
+function onFileSelect(e) { const f = e.target.files[0]; if (f) readFile(f); }
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = ev => {
+    S.fileContent = ev.target.result;
+    S.fileName = file.name;
+    document.getElementById('drop-zone').style.display = 'none';
+    document.getElementById('file-info').style.display = 'flex';
+    document.getElementById('file-name').textContent = file.name;
+    document.getElementById('file-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
+    toast('File loaded: ' + file.name, 'success');
+  };
+  reader.readAsText(file);
+}
+function clearFile() {
+  S.fileContent = ''; S.fileName = '';
+  document.getElementById('file-input').value = '';
+  document.getElementById('drop-zone').style.display = '';
+  document.getElementById('file-info').style.display = 'none';
+}
+
+// ── Generate ──
+async function generate() {
+  const apiKey = localStorage.getItem('tonik_api_key');
+  if (!apiKey) { toast('Set your Anthropic API key first', 'error'); openApiModal(); return; }
+
+  let prompt = '';
+  if (S.mode === 'create') {
+    const name = document.getElementById('c-name').value.trim();
+    if (!name) { toast('Feature name is required', 'error'); document.getElementById('c-name').focus(); return; }
+    const problem = document.getElementById('c-problem').value.trim();
+    if (!problem) { toast('Problem statement is required', 'error'); document.getElementById('c-problem').focus(); return; }
+    prompt = makeCreatePrompt({ name, area: document.getElementById('c-area').value, priority: document.getElementById('c-priority').value, problem, goals: document.getElementById('c-goals').value.trim(), users: document.getElementById('c-users').value.trim(), requirements: document.getElementById('c-requirements').value.trim(), tech: document.getElementById('c-tech').value.trim(), context: document.getElementById('c-context').value.trim() });
+  } else {
+    if (!S.fileContent) { toast('Upload a PRD file first', 'error'); return; }
+    const changes = document.getElementById('u-changes').value.trim();
+    if (!changes) { toast('Describe what to update', 'error'); document.getElementById('u-changes').focus(); return; }
+    prompt = makeUpdatePrompt({ existing: S.fileContent, changes, context: document.getElementById('u-context').value.trim(), scope: document.getElementById('u-scope').value });
+  }
+
+  const model = localStorage.getItem('tonik_model') || 'claude-sonnet-4-6';
+  S.generating = true; S.content = '';
+  const btn = document.getElementById('btn-gen');
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div><span>Generating…</span>`;
+  document.getElementById('streaming-bar').style.display = 'flex';
+  document.getElementById('streaming-msg').textContent = S.mode === 'create' ? 'Drafting your PRD with Claude AI…' : 'Updating your PRD with Claude AI…';
+  document.getElementById('output-actions').style.display = 'none';
+  document.getElementById('output-body').innerHTML = `<div class="preview-wrap" id="stream-preview"><em style="color:var(--muted)">Starting generation…</em></div>`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', 'anthropic-dangerous-allow-browser': 'true' },
+      body: JSON.stringify({ model, max_tokens: 8192, stream: true, system: SYSTEM_PROMPT, messages: [{ role: 'user', content: prompt }] }),
+    });
+    if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error?.message || `API ${res.status}`); }
+
+    const reader = res.body.getReader();
+    const dec = new TextDecoder();
+    let buf = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const lines = buf.split('\n'); buf = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const d = line.slice(6); if (d === '[DONE]') continue;
+        try {
+          const j = JSON.parse(d);
+          if (j.type === 'content_block_delta' && j.delta?.type === 'text_delta') {
+            S.content += j.delta.text;
+            const el = document.getElementById('stream-preview');
+            if (el) el.innerHTML = marked.parse(S.content);
+          }
+        } catch {}
+      }
+    }
+
+    renderOutput();
+    document.getElementById('output-actions').style.display = 'flex';
+    toast('PRD generated successfully!', 'success');
+  } catch (e) {
+    toast('Error: ' + e.message, 'error');
+    document.getElementById('output-body').innerHTML = `<div class="empty-state"><div class="empty-state-title" style="color:var(--danger)">Generation Failed</div><div class="empty-state-sub">${esc(e.message)}</div></div>`;
+  } finally {
+    S.generating = false;
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="gen-label">${S.mode === 'create' ? 'Generate PRD' : 'Update PRD'}</span>`;
+    document.getElementById('streaming-bar').style.display = 'none';
+  }
+}
+
+// ── Prompts ──
+const SYSTEM_PROMPT = `You are a senior product manager at Tonik, a leading digital bank in the Philippines. You write rigorous, thorough, and actionable Product Requirements Documents (PRDs) that engineering, design, and business teams can act on immediately.
+
+Always produce PRDs using this exact Tonik template:
+
+---
+# [Feature Name] — Product Requirements Document
+
+**Version:** 1.0  |  **Status:** Draft  |  **Date:** ${new Date().toLocaleDateString('en-PH', {year:'numeric',month:'long',day:'numeric'})}  |  **Author:** Product Team
+**Product Area:** [area]  |  **Priority:** [priority]
+
+---
+
+## 1. Executive Summary
+[2–3 paragraphs: what this feature is, why it matters now, and what it delivers to the business and customers]
+
+## 2. Problem Statement
+[Clearly state the problem, who is affected, scale of impact, current workarounds and their limitations, and cost of inaction]
+
+## 3. Goals & Success Metrics
+
+### Business Goals
+- [Goal 1]
+
+### Success Metrics (KPIs)
+| Metric | Baseline | Target | Measurement Window |
+|--------|----------|--------|--------------------|
+| | | | |
+
+## 4. Target Users
+
+### Primary Users
+[Persona description]
+
+### Secondary Users
+[If applicable]
+
+## 5. User Stories
+| ID | As a… | I want to… | So that… | Priority |
+|----|-------|-----------|----------|----------|
+| US-01 | | | | P0 |
+
+## 6. Functional Requirements
+
+### 6.1 [Feature Area]
+| ID | Requirement | Priority | Acceptance Criteria |
+|----|-------------|----------|---------------------|
+| FR-01 | | P0 | Given… When… Then… |
+
+## 7. Non-Functional Requirements
+| Category | Requirement | Target |
+|----------|-------------|--------|
+| Performance | API response time | < 2s p95 |
+| Availability | Uptime | 99.9% |
+| Security | Encryption | AES-256 at rest, TLS 1.3 in transit |
+| Scalability | | |
+
+## 8. UX / Design Requirements
+[Screen flows, mobile-first (Android/iOS), accessibility, key UX principles]
+
+## 9. Technical Considerations
+[API integrations, data model changes, third-party dependencies, performance and security constraints]
+
+## 10. Dependencies & Integrations
+| System | Type | Owner | Status |
+|--------|------|-------|--------|
+| Core Banking | REST API | Engineering | Existing |
+
+## 11. Out of Scope (v1.0)
+- [Item 1]
+
+## 12. Risks & Mitigations
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+
+## 13. Timeline & Milestones
+| Milestone | Target Date | Owner |
+|-----------|-------------|-------|
+| PRD sign-off | TBD | PM |
+| Design complete | TBD | Design |
+| Engineering complete | TBD | Engineering |
+| QA complete | TBD | QA |
+| Launch | TBD | PM |
+
+## 14. Open Questions
+| # | Question | Owner | Due |
+|---|----------|-------|-----|
+
+## 15. Appendix
+[References, related documents, glossary]
+
+---
+*Document maintained by Tonik Product Team.*
+---
+
+Rules:
+- Always use this full structure — never skip sections
+- Write concrete, testable acceptance criteria (Given/When/Then format)
+- Use real banking/fintech domain knowledge for Tonik (Philippines market, BSP regulations where relevant)
+- Aim for 2000–3500 words — a PRD a team can ship from
+- Make reasonable, well-justified assumptions where input is sparse`;
+
+function makeCreatePrompt(d) {
+  return `Create a complete Tonik PRD for the following feature.
+
+**Feature Name:** ${d.name}
+**Product Area:** ${d.area || 'Not specified'}
+**Priority:** ${d.priority}
+
+**Problem Statement:**
+${d.problem}
+
+**Goals & Success Metrics:**
+${d.goals || 'Not provided — define appropriate KPIs for this banking feature.'}
+
+**Target Users:**
+${d.users || 'Not specified — define appropriate personas.'}
+
+**Key Requirements / Features:**
+${d.requirements || 'Not provided — derive from problem statement.'}
+
+**Technical Context / Constraints:**
+${d.tech || 'Not specified.'}
+
+**Additional Context:**
+${d.context || 'None.'}
+
+Generate the full PRD. Where I have not provided explicit input, apply your product management expertise to make reasonable, well-reasoned assumptions for a digital bank serving the Philippines market.`;
+}
+
+function makeUpdatePrompt(d) {
+  return `Update the following Tonik PRD.
+
+**Update Scope:** ${d.scope === 'full' ? 'Full revision — rewrite entirely with all changes integrated' : 'Targeted — only modify sections explicitly mentioned, preserve everything else'}
+
+**What to Change:**
+${d.changes}
+
+**New Context / Information:**
+${d.context || 'None.'}
+
+**Existing PRD:**
+${d.existing}
+
+Output the complete updated PRD using the same Tonik template. ${d.scope === 'targeted' ? 'Keep all unchanged sections exactly as-is.' : 'Integrate all updates coherently throughout.'} Increment the version number to the next minor version.`;
+}
+
+// ── Actions ──
+function copyMarkdown() {
+  if (!S.content) return;
+  navigator.clipboard.writeText(S.content).then(() => toast('Copied to clipboard', 'success')).catch(() => toast('Copy failed', 'error'));
+}
+function downloadMd() {
+  if (!S.content) return;
+  const name = S.mode === 'create'
+    ? (document.getElementById('c-name').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-') || 'prd') + '-prd.md'
+    : (S.fileName.replace(/\.[^.]+$/,'') || 'updated-prd') + '.md';
+  const blob = new Blob([S.content], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── Toast ──
+function toast(msg, type = 'info', ms = 4000) {
+  const c = document.getElementById('toasts');
+  const d = document.createElement('div');
+  const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
+  d.className = `toast ${type}`;
+  d.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
+  c.appendChild(d);
+  setTimeout(() => d.remove(), ms);
+}
+
+// ── Enter key on API modal ──
+document.getElementById('modal-api-key').addEventListener('keydown', e => { if (e.key === 'Enter') saveApiKey(); });
+
+// ── Init ──
+loadPrefs();
+</script>
+</body>
+</html>
