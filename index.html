@@ -16,129 +16,137 @@
   --text: #1e293b; --muted: #64748b; --subtle: #94a3b8;
   --radius: 12px; --radius-sm: 7px;
 }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; min-height: 100vh; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
 /* ── Header ── */
 .header {
   background: linear-gradient(135deg, #1340B0 0%, #1A4FD8 60%, #2563eb 100%);
-  color: #fff; padding: 0 28px; height: 60px;
+  color: #fff; padding: 0 24px; height: 58px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: space-between;
-  box-shadow: 0 2px 16px rgba(26,79,216,.35); position: sticky; top: 0; z-index: 50;
+  box-shadow: 0 2px 16px rgba(26,79,216,.35); z-index: 50;
 }
 .header-brand { display: flex; align-items: center; gap: 12px; }
 .header-logo {
   width: 34px; height: 34px; background: rgba(255,255,255,.18);
   border: 1.5px solid rgba(255,255,255,.3); border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 14px; letter-spacing: -1px;
+  font-weight: 900; font-size: 14px;
 }
 .header-title { font-size: 17px; font-weight: 800; }
 .header-sub { font-size: 11px; opacity: .6; margin-top: 1px; }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.api-key-pill {
-  display: flex; align-items: center; gap: 7px;
-  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
-  border-radius: 20px; padding: 5px 14px; cursor: pointer;
-  font-size: 12px; transition: background .15s;
+.model-selector {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
+  border-radius: 8px; padding: 5px 12px;
 }
-.api-key-pill:hover { background: rgba(255,255,255,.22); }
-.api-dot { width: 7px; height: 7px; border-radius: 50%; background: #94a3b8; flex-shrink: 0; }
-.api-dot.ready { background: #4ade80; }
+.model-selector label { font-size: 11px; opacity: .75; white-space: nowrap; }
+.model-selector select {
+  background: transparent; border: none; color: #fff; font-size: 12px;
+  font-weight: 600; cursor: pointer; outline: none;
+  appearance: none; padding-right: 14px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0 center;
+}
+.model-selector select option { background: #1340B0; color: #fff; }
 
-/* ── Hero / Mode selector ── */
-.hero { background: var(--card); border-bottom: 1px solid var(--border); padding: 20px 28px; }
-.hero-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 12px; }
+/* ── Mode selector ── */
+.hero { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; flex-shrink: 0; }
+.hero-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 10px; }
 .mode-cards { display: flex; gap: 12px; }
 .mode-card {
-  flex: 1; max-width: 260px; padding: 14px 18px; border: 2px solid var(--border);
+  flex: 1; max-width: 280px; padding: 13px 16px; border: 2px solid var(--border);
   border-radius: var(--radius); cursor: pointer; transition: all .18s; background: var(--bg);
   display: flex; align-items: flex-start; gap: 12px;
 }
 .mode-card:hover { border-color: var(--primary); background: var(--primary-light); }
 .mode-card.active { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 3px rgba(26,79,216,.1); }
-.mode-card-icon {
+.mode-icon {
   width: 36px; height: 36px; border-radius: 8px; background: var(--primary-mid);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  color: var(--primary);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary);
 }
-.mode-card.active .mode-card-icon { background: var(--primary); color: #fff; }
-.mode-card-label { font-size: 14px; font-weight: 700; color: var(--text); }
-.mode-card-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+.mode-card.active .mode-icon { background: var(--primary); color: #fff; }
+.mode-title { font-size: 13px; font-weight: 700; }
+.mode-desc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
-/* ── Main layout ── */
-.workspace { display: grid; grid-template-columns: 420px 1fr; gap: 0; height: calc(100vh - 60px - 97px); }
-@media (max-width: 900px) { .workspace { grid-template-columns: 1fr; height: auto; } }
+/* ── Workspace ── */
+.workspace { display: flex; flex: 1; overflow: hidden; }
 
 /* ── Input panel ── */
-.input-panel { background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-.input-panel-scroll { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-.section-head { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.input-panel { width: 400px; flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.input-scroll { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field-label { font-size: 12px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 5px; }
-.field-label .req { color: var(--danger); }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field-label { font-size: 12px; font-weight: 700; color: var(--text); }
+.req { color: var(--danger); margin-left: 2px; }
 .field-hint { font-size: 11px; color: var(--muted); line-height: 1.4; }
 .field-input {
-  padding: 9px 12px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 9px 11px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
   font-size: 13px; background: #fff; color: var(--text); width: 100%;
   transition: border-color .15s, box-shadow .15s; font-family: inherit;
 }
 .field-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,79,216,.08); }
 .field-input::placeholder { color: var(--subtle); }
-.field-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.field-textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
 .field-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px; cursor: pointer;
+  appearance: none; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
 }
 .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-/* Upload zone */
+/* Upload */
 .upload-zone {
-  border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px 16px;
+  border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px;
   text-align: center; cursor: pointer; transition: all .2s; background: var(--bg);
 }
 .upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: var(--primary-light); }
 .upload-zone input { display: none; }
-.upload-zone-icon { color: var(--subtle); margin-bottom: 8px; }
-.upload-zone-text { font-size: 13px; color: var(--muted); }
-.upload-zone-text strong { color: var(--primary); }
-.uploaded-file {
+.upload-zone p { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.upload-zone strong { color: var(--primary); }
+.upload-zone small { display: block; font-size: 11px; color: var(--subtle); margin-top: 3px; }
+.file-chip {
   background: var(--primary-light); border: 1.5px solid var(--primary-mid);
-  border-radius: var(--radius-sm); padding: 10px 14px;
-  display: flex; align-items: center; gap: 10px;
+  border-radius: var(--radius-sm); padding: 9px 12px;
+  display: flex; align-items: center; gap: 9px;
 }
-.uploaded-file-icon { color: var(--primary); flex-shrink: 0; }
-.uploaded-file-name { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; word-break: break-all; }
-.uploaded-file-size { font-size: 11px; color: var(--muted); }
-.btn-remove { background: none; border: none; color: var(--muted); cursor: pointer; padding: 2px; border-radius: 4px; }
+.file-chip-name { font-size: 12px; font-weight: 600; flex: 1; word-break: break-all; }
+.file-chip-size { font-size: 11px; color: var(--muted); white-space: nowrap; }
+.btn-remove { background: none; border: none; color: var(--muted); cursor: pointer; padding: 2px 4px; border-radius: 4px; display: flex; }
 .btn-remove:hover { color: var(--danger); background: var(--danger-light); }
 
-/* Panel footer */
-.input-footer { padding: 14px 20px; border-top: 1px solid var(--border); background: var(--card); flex-shrink: 0; }
+/* Footer */
+.input-footer { padding: 14px 18px; border-top: 1px solid var(--border); flex-shrink: 0; }
 .btn-generate {
   width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none;
   border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 9px;
-  transition: background .15s, transform .1s; letter-spacing: .2px;
+  transition: background .15s, box-shadow .15s;
 }
-.btn-generate:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
-.btn-generate:active:not(:disabled) { transform: translateY(0); }
-.btn-generate:disabled { background: var(--subtle); cursor: not-allowed; transform: none; }
-.spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
+.btn-generate:hover:not(:disabled) { background: var(--primary-dark); box-shadow: 0 4px 14px rgba(26,79,216,.35); }
+.btn-generate:disabled { background: var(--subtle); cursor: not-allowed; }
+.spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Output panel ── */
-.output-panel { display: flex; flex-direction: column; overflow: hidden; background: var(--card); }
+.output-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
-.output-bar {
-  padding: 0 16px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 0; background: var(--card); flex-shrink: 0; min-height: 46px;
+.stream-bar {
+  padding: 8px 16px; background: var(--primary-light); border-bottom: 1px solid var(--primary-mid);
+  display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--primary); flex-shrink: 0;
+}
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0;
+  animation: pulse .9s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+
+.out-bar {
+  border-bottom: 1px solid var(--border); display: flex; align-items: center;
+  padding: 0 16px; flex-shrink: 0; min-height: 46px; background: var(--card);
 }
 .out-tab { padding: 12px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); transition: all .15s; white-space: nowrap; }
 .out-tab:hover { color: var(--primary); }
 .out-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-.output-actions { margin-left: auto; display: flex; gap: 7px; align-items: center; }
+.out-actions { margin-left: auto; display: flex; gap: 7px; }
 .btn-sm {
   padding: 6px 13px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700;
   cursor: pointer; border: 1.5px solid var(--border); background: #fff; color: var(--text);
@@ -149,33 +157,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn-sm.primary:hover { background: var(--primary-dark); }
 .btn-sm:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
 
-/* Streaming bar */
-.streaming-bar {
-  padding: 8px 16px; background: var(--primary-light); border-bottom: 1px solid var(--primary-mid);
-  display: flex; align-items: center; gap: 9px; font-size: 12px; color: var(--primary); flex-shrink: 0;
-}
-.pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); animation: pulse .9s ease-in-out infinite; flex-shrink: 0; }
-@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .3; transform: scale(.7); } }
-
-.output-body { flex: 1; overflow-y: auto; }
+.out-body { flex: 1; overflow-y: auto; }
 
 /* Empty state */
-.empty-state {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  height: 100%; gap: 14px; padding: 40px; text-align: center;
-}
-.empty-state-icon { color: var(--border-dark); }
-.empty-state-title { font-size: 16px; font-weight: 700; color: var(--text); }
-.empty-state-sub { font-size: 13px; color: var(--muted); max-width: 340px; line-height: 1.6; }
-.empty-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; text-align: left; }
-.empty-step { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--muted); }
-.empty-step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--primary-mid); color: var(--primary); font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 14px; padding: 40px; text-align: center; }
+.empty-icon { color: var(--border-dark); }
+.empty-title { font-size: 16px; font-weight: 700; }
+.empty-sub { font-size: 13px; color: var(--muted); max-width: 340px; line-height: 1.6; }
+.steps { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; text-align: left; }
+.step { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--muted); }
+.step-n { width: 20px; height: 20px; border-radius: 50%; background: var(--primary-mid); color: var(--primary); font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
 
 /* Preview */
 .preview-wrap { padding: 32px 44px; max-width: 820px; margin: 0 auto; }
-.preview-wrap h1 { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 6px; padding-bottom: 14px; border-bottom: 3px solid var(--primary); }
+.preview-wrap h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; padding-bottom: 14px; border-bottom: 3px solid var(--primary); }
 .preview-wrap h2 { font-size: 16px; font-weight: 700; color: var(--primary-dark); margin: 24px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
-.preview-wrap h3 { font-size: 14px; font-weight: 700; color: var(--text); margin: 16px 0 6px; }
+.preview-wrap h3 { font-size: 14px; font-weight: 700; margin: 16px 0 6px; }
 .preview-wrap h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin: 12px 0 4px; }
 .preview-wrap p { line-height: 1.7; margin-bottom: 9px; }
 .preview-wrap ul, .preview-wrap ol { padding-left: 22px; margin-bottom: 10px; }
@@ -184,54 +181,26 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .preview-wrap th { background: var(--primary-light); color: var(--primary-dark); font-weight: 700; padding: 9px 13px; border: 1px solid var(--border); text-align: left; font-size: 12px; }
 .preview-wrap td { padding: 8px 13px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
 .preview-wrap tr:nth-child(even) td { background: #f8fafc; }
-.preview-wrap code { background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 12px; font-family: 'Cascadia Code', 'Fira Code', monospace; }
+.preview-wrap code { background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 12px; font-family: 'Cascadia Code','Fira Code',monospace; }
 .preview-wrap pre { background: #f1f5f9; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; overflow-x: auto; margin: 10px 0; }
 .preview-wrap pre code { background: none; border: none; padding: 0; }
 .preview-wrap blockquote { border-left: 3px solid var(--primary); padding: 8px 14px; background: var(--primary-light); margin: 10px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--primary-dark); }
 .preview-wrap hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
 
 /* Raw */
-.raw-wrap { padding: 16px; height: 100%; display: flex; flex-direction: column; }
-.raw-wrap textarea {
-  flex: 1; width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  padding: 14px; font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-  font-size: 12px; line-height: 1.65; background: #f8fafc; resize: none; color: var(--text);
-}
+.raw-wrap { padding: 14px; height: 100%; display: flex; flex-direction: column; }
+.raw-wrap textarea { flex: 1; width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 12px; line-height: 1.65; background: #f8fafc; resize: none; color: var(--text); }
 .raw-wrap textarea:focus { outline: none; border-color: var(--primary); }
 
-/* API key modal */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 200;
-  display: flex; align-items: center; justify-content: center; padding: 20px;
-  backdrop-filter: blur(2px);
-}
-.modal {
-  background: #fff; border-radius: var(--radius); box-shadow: 0 25px 60px rgba(0,0,0,.22);
-  width: 100%; max-width: 440px; overflow: hidden;
-}
-.modal-header { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
-.modal-title { font-size: 16px; font-weight: 800; }
-.modal-sub { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
-.modal-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
-.modal-footer { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
-.btn-primary { padding: 9px 20px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
-.btn-primary:hover { background: var(--primary-dark); }
-.btn-ghost { padding: 9px 16px; background: #fff; color: var(--text); border: 1.5px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; }
-.btn-ghost:hover { background: var(--bg); }
-
-/* Toast */
-.toast-wrap { position: fixed; bottom: 22px; right: 22px; z-index: 300; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-.toast {
-  padding: 11px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
-  box-shadow: 0 4px 20px rgba(0,0,0,.14); display: flex; align-items: center; gap: 9px;
-  animation: toastIn .22s ease; max-width: 380px; pointer-events: all;
-}
-@keyframes toastIn { from { transform: translateX(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+/* Toasts */
+.toast-wrap { position: fixed; bottom: 20px; right: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+.toast { padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.14); display: flex; align-items: center; gap: 8px; animation: tin .2s ease; max-width: 380px; pointer-events: all; }
+@keyframes tin { from{transform:translateX(14px);opacity:0} to{transform:none;opacity:1} }
 .toast.success { background: var(--success-light); color: var(--success); border: 1px solid #86efac; }
 .toast.error   { background: var(--danger-light);  color: var(--danger);  border: 1px solid #fca5a5; }
 .toast.info    { background: var(--primary-light); color: var(--primary); border: 1px solid #93c5fd; }
 
-/* Scroll */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
@@ -248,35 +217,36 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
       <div class="header-sub">Tonik Financial · Powered by Claude AI</div>
     </div>
   </div>
-  <div class="header-right">
-    <div class="api-key-pill" onclick="openApiModal()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-      <span id="api-pill-text">Set API Key</span>
-      <div class="api-dot" id="api-dot"></div>
-    </div>
+  <div class="model-selector">
+    <label for="model-pick">Model:</label>
+    <select id="model-pick">
+      <option value="claude-sonnet-4-5-20251001">Sonnet 4.5 — Recommended</option>
+      <option value="claude-opus-4-5-20251101">Opus 4.5 — Most thorough</option>
+      <option value="claude-haiku-4-5-20251001">Haiku 4.5 — Fastest</option>
+    </select>
   </div>
 </header>
 
 <!-- Mode selector -->
 <div class="hero">
-  <div class="hero-title">What would you like to do?</div>
+  <div class="hero-label">What would you like to do?</div>
   <div class="mode-cards">
     <div class="mode-card active" id="card-create" onclick="switchMode('create')">
-      <div class="mode-card-icon">
+      <div class="mode-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
       </div>
       <div>
-        <div class="mode-card-label">Create New PRD</div>
-        <div class="mode-card-desc">Draft a complete Tonik PRD from scratch using Claude AI</div>
+        <div class="mode-title">Create New PRD</div>
+        <div class="mode-desc">Draft a complete Tonik PRD from scratch using Claude AI</div>
       </div>
     </div>
     <div class="mode-card" id="card-update" onclick="switchMode('update')">
-      <div class="mode-card-icon">
+      <div class="mode-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
       </div>
       <div>
-        <div class="mode-card-label">Update Existing PRD</div>
-        <div class="mode-card-desc">Upload a PRD file and revise it with new context</div>
+        <div class="mode-title">Update Existing PRD</div>
+        <div class="mode-desc">Upload a PRD file and revise it with new context</div>
       </div>
     </div>
   </div>
@@ -287,11 +257,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
   <!-- Input panel -->
   <div class="input-panel">
-    <div class="input-panel-scroll" id="input-scroll">
+    <div class="input-scroll" id="input-scroll">
 
-      <!-- CREATE form -->
+      <!-- CREATE -->
       <div id="form-create">
-        <div class="section-head">Feature Details</div>
+        <div class="section-label">Feature Details</div>
 
         <div class="field">
           <label class="field-label">Feature / Product Name <span class="req">*</span></label>
@@ -331,13 +301,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <label class="field-label">Goals &amp; Success Metrics</label>
           <div class="field-hint">What does success look like? Include KPI targets if known.</div>
           <textarea class="field-input field-textarea" id="c-goals" rows="3"
-            placeholder="e.g. Reduce loan defaults by 15%, deflect 30% of restructuring calls to self-service, NPS improvement..."></textarea>
+            placeholder="e.g. Reduce loan defaults by 15%, deflect 30% of restructuring calls to self-service..."></textarea>
         </div>
 
         <div class="field">
           <label class="field-label">Target Users</label>
-          <input class="field-input" type="text" id="c-users"
-            placeholder="e.g. Tonik borrowers with active loans, 25–45 age, mobile-first">
+          <input class="field-input" type="text" id="c-users" placeholder="e.g. Tonik borrowers with active loans, 25–45 age, mobile-first">
         </div>
 
         <div class="field">
@@ -350,37 +319,38 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         <div class="field">
           <label class="field-label">Technical Context / Constraints</label>
           <textarea class="field-input field-textarea" id="c-tech" rows="2"
-            placeholder="e.g. Must use existing Loan API, Android/iOS only, no web support..."></textarea>
+            placeholder="e.g. Must use existing Loan API, Android/iOS only..."></textarea>
         </div>
 
         <div class="field">
           <label class="field-label">Additional Context</label>
           <textarea class="field-input field-textarea" id="c-context" rows="3"
-            placeholder="Stakeholder inputs, regulatory requirements, research findings, competitive context..."></textarea>
+            placeholder="Stakeholder inputs, regulatory requirements, research findings..."></textarea>
         </div>
       </div>
 
-      <!-- UPDATE form -->
+      <!-- UPDATE -->
       <div id="form-update" style="display:none">
-        <div class="section-head">Upload Existing PRD</div>
+        <div class="section-label">Upload Existing PRD</div>
 
-        <div id="upload-area">
-          <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
-            <input type="file" id="file-input" accept=".md,.markdown,.txt,.docx" onchange="onFileSelect(event)">
-            <div class="upload-zone-icon">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
-            </div>
-            <div class="upload-zone-text"><strong>Click to upload</strong> or drag &amp; drop</div>
-            <div style="font-size:11px;color:var(--subtle);margin-top:4px">.md · .txt · .docx</div>
+        <div id="drop-wrap">
+          <div class="upload-zone" id="drop-zone"
+               onclick="document.getElementById('file-in').click()"
+               ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+            <input type="file" id="file-in" accept=".md,.markdown,.txt" onchange="onFilePick(event)">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--subtle)" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+              <line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
+            </svg>
+            <p><strong>Click to upload</strong> or drag &amp; drop</p>
+            <small>.md · .txt</small>
           </div>
-          <div id="file-info" style="display:none" class="uploaded-file">
-            <svg class="uploaded-file-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <div>
-              <div class="uploaded-file-name" id="file-name">—</div>
-              <div class="uploaded-file-size" id="file-size">—</div>
-            </div>
-            <button class="btn-remove" onclick="clearFile()" title="Remove file">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <div class="file-chip" id="file-chip" style="display:none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span class="file-chip-name" id="file-name">—</span>
+            <span class="file-chip-size" id="file-size">—</span>
+            <button class="btn-remove" onclick="clearFile()" title="Remove">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
           </div>
         </div>
@@ -389,14 +359,14 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           <label class="field-label">What to Update <span class="req">*</span></label>
           <div class="field-hint">Describe changes, new sections, corrections, or additions needed.</div>
           <textarea class="field-input field-textarea" id="u-changes" rows="5"
-            placeholder="e.g. Add fraud detection requirements to Section 6, update success metrics to reflect new OKRs, revise the out-of-scope section to exclude web support..."></textarea>
+            placeholder="e.g. Add fraud detection requirements, update success metrics to new OKRs, revise out-of-scope section..."></textarea>
         </div>
 
         <div class="field">
           <label class="field-label">New Context / Information</label>
           <div class="field-hint">Paste meeting notes, research, stakeholder feedback, or regulatory updates.</div>
           <textarea class="field-input field-textarea" id="u-context" rows="4"
-            placeholder="Meeting notes, new requirements, user research findings, compliance updates..."></textarea>
+            placeholder="Meeting notes, new requirements, compliance updates..."></textarea>
         </div>
 
         <div class="field">
@@ -408,28 +378,27 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         </div>
       </div>
 
-    </div>
+    </div><!-- /input-scroll -->
 
-    <!-- Generate button -->
     <div class="input-footer">
       <button class="btn-generate" id="btn-gen" onclick="generate()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         <span id="gen-label">Generate PRD</span>
       </button>
     </div>
-  </div>
+  </div><!-- /input-panel -->
 
   <!-- Output panel -->
   <div class="output-panel">
-    <div id="streaming-bar" class="streaming-bar" style="display:none">
-      <div class="pulse-dot"></div>
-      <span id="streaming-msg">Generating PRD with Claude AI...</span>
+    <div class="stream-bar" id="stream-bar" style="display:none">
+      <div class="pulse"></div>
+      <span id="stream-msg">Generating PRD with Claude AI…</span>
     </div>
-    <div class="output-bar">
+    <div class="out-bar">
       <div class="out-tab active" id="tab-preview" onclick="switchTab('preview')">Preview</div>
       <div class="out-tab" id="tab-raw" onclick="switchTab('raw')">Markdown</div>
-      <div class="output-actions" id="output-actions" style="display:none">
-        <button class="btn-sm" onclick="copyMarkdown()">
+      <div class="out-actions" id="out-actions" style="display:none">
+        <button class="btn-sm" onclick="copyMd()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           Copy
         </button>
@@ -439,101 +408,39 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         </button>
       </div>
     </div>
-    <div class="output-body" id="output-body">
-      <div class="empty-state" id="empty-state">
-        <svg class="empty-state-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+    <div class="out-body" id="out-body">
+      <div class="empty-state">
+        <svg class="empty-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
           <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
         </svg>
-        <div class="empty-state-title">Your PRD will appear here</div>
-        <div class="empty-state-sub">Fill in the form and click <strong>Generate PRD</strong> to draft a complete Tonik-format PRD with Claude AI.</div>
-        <div class="empty-steps">
-          <div class="empty-step"><div class="empty-step-num">1</div><span>Set your Anthropic API key (top right)</span></div>
-          <div class="empty-step"><div class="empty-step-num">2</div><span>Choose Create or Update mode</span></div>
-          <div class="empty-step"><div class="empty-step-num">3</div><span>Fill in the details and generate</span></div>
-          <div class="empty-step"><div class="empty-step-num">4</div><span>Download the finished .md file</span></div>
+        <div class="empty-title">Your PRD will appear here</div>
+        <div class="empty-sub">Fill in the form and click <strong>Generate PRD</strong> to draft a complete Tonik PRD with Claude AI — no setup needed.</div>
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><span>Choose <strong>Create</strong> or <strong>Update</strong> mode</span></div>
+          <div class="step"><div class="step-n">2</div><span>Fill in the feature details on the left</span></div>
+          <div class="step"><div class="step-n">3</div><span>Click <strong>Generate PRD</strong> and watch it stream in</span></div>
+          <div class="step"><div class="step-n">4</div><span>Download the finished <code>.md</code> file</span></div>
         </div>
       </div>
     </div>
-  </div>
+  </div><!-- /output-panel -->
 
-</div>
+</div><!-- /workspace -->
 
-<!-- API Key Modal -->
-<div class="modal-overlay" id="api-modal" style="display:none" onclick="closeApiModal(event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">Anthropic API Key</div>
-      <div class="modal-sub">Your key is stored only in your browser (localStorage) and is never sent anywhere except the Anthropic API.</div>
-    </div>
-    <div class="modal-body">
-      <div class="field">
-        <label class="field-label">API Key</label>
-        <input class="field-input" type="password" id="modal-api-key" placeholder="sk-ant-api03-..." autocomplete="off">
-      </div>
-      <div class="field">
-        <label class="field-label">Model</label>
-        <select class="field-input field-select" id="modal-model">
-          <option value="claude-sonnet-4-5-20251001">Claude Sonnet 4.5 — Recommended</option>
-          <option value="claude-opus-4-5-20251101">Claude Opus 4.5 — Most thorough</option>
-          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 — Fastest</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-ghost" onclick="closeApiModal()">Cancel</button>
-      <button class="btn-primary" onclick="saveApiKey()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast -->
 <div class="toast-wrap" id="toasts"></div>
 
 <script>
-// ── State ──
-const S = { mode: 'create', tab: 'preview', content: '', fileContent: '', fileName: '', generating: false };
-
-// ── Persist ──
-function loadPrefs() {
-  const k = localStorage.getItem('tonik_api_key');
-  const m = localStorage.getItem('tonik_model');
-  if (k) { document.getElementById('modal-api-key').value = k; updateApiPill(true); }
-  if (m) document.getElementById('modal-model').value = m;
-}
-function saveApiKey() {
-  const k = document.getElementById('modal-api-key').value.trim();
-  const m = document.getElementById('modal-model').value;
-  localStorage.setItem('tonik_api_key', k);
-  localStorage.setItem('tonik_model', m);
-  updateApiPill(!!k);
-  closeApiModal();
-  toast('API key saved', 'success');
-}
-function updateApiPill(ready) {
-  document.getElementById('api-pill-text').textContent = ready ? 'API Key Set' : 'Set API Key';
-  document.getElementById('api-dot').className = 'api-dot' + (ready ? ' ready' : '');
-}
-function openApiModal() {
-  const k = localStorage.getItem('tonik_api_key') || '';
-  const m = localStorage.getItem('tonik_model') || 'claude-sonnet-4-5-20251001';
-  document.getElementById('modal-api-key').value = k;
-  document.getElementById('modal-model').value = m;
-  document.getElementById('api-modal').style.display = 'flex';
-  setTimeout(() => document.getElementById('modal-api-key').focus(), 50);
-}
-function closeApiModal(e) {
-  if (!e || e.target === document.getElementById('api-modal'))
-    document.getElementById('api-modal').style.display = 'none';
-}
+const S = { mode: 'create', tab: 'preview', content: '', fileContent: '' };
 
 // ── Mode ──
 function switchMode(m) {
   S.mode = m;
-  document.getElementById('card-create').classList.toggle('active', m === 'create');
-  document.getElementById('card-update').classList.toggle('active', m === 'update');
-  document.getElementById('form-create').style.display = m === 'create' ? 'block' : 'none';
-  document.getElementById('form-update').style.display = m === 'update' ? 'block' : 'none';
+  ['create','update'].forEach(x => {
+    document.getElementById('card-' + x).classList.toggle('active', x === m);
+    document.getElementById('form-' + x).style.display = x === m ? 'block' : 'none';
+  });
   document.getElementById('gen-label').textContent = m === 'create' ? 'Generate PRD' : 'Update PRD';
 }
 
@@ -542,11 +449,11 @@ function switchTab(t) {
   S.tab = t;
   document.getElementById('tab-preview').classList.toggle('active', t === 'preview');
   document.getElementById('tab-raw').classList.toggle('active', t === 'raw');
-  renderOutput();
+  renderOut();
 }
-function renderOutput() {
+function renderOut() {
   if (!S.content) return;
-  const el = document.getElementById('output-body');
+  const el = document.getElementById('out-body');
   if (S.tab === 'preview') {
     el.innerHTML = `<div class="preview-wrap">${marked.parse(S.content)}</div>`;
   } else {
@@ -557,39 +464,47 @@ function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 
 // ── File upload ──
 function onDragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
-function onDragLeave(e) { document.getElementById('drop-zone').classList.remove('drag-over'); }
-function onDrop(e) { e.preventDefault(); onDragLeave(); const f = e.dataTransfer.files[0]; if (f) readFile(f); }
-function onFileSelect(e) { const f = e.target.files[0]; if (f) readFile(f); }
+function onDragLeave()  { document.getElementById('drop-zone').classList.remove('drag-over'); }
+function onDrop(e)      { e.preventDefault(); onDragLeave(); const f = e.dataTransfer.files[0]; if (f) readFile(f); }
+function onFilePick(e)  { const f = e.target.files[0]; if (f) readFile(f); }
+function readFile(file) {
+  new FileReader().onload = ev => {
+    S.fileContent = ev.target.result;
+    document.getElementById('drop-zone').style.display = 'none';
+    document.getElementById('file-chip').style.display = 'flex';
+    document.getElementById('file-name').textContent = file.name;
+    document.getElementById('file-size').textContent = (file.size/1024).toFixed(1) + ' KB';
+    toast('Loaded: ' + file.name, 'success');
+  };
+  (new FileReader()).readAsText(file);
+}
+// Fix: re-attach onload
 function readFile(file) {
   const reader = new FileReader();
   reader.onload = ev => {
     S.fileContent = ev.target.result;
-    S.fileName = file.name;
     document.getElementById('drop-zone').style.display = 'none';
-    document.getElementById('file-info').style.display = 'flex';
+    document.getElementById('file-chip').style.display = 'flex';
     document.getElementById('file-name').textContent = file.name;
-    document.getElementById('file-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
-    toast('File loaded: ' + file.name, 'success');
+    document.getElementById('file-size').textContent = (file.size/1024).toFixed(1) + ' KB';
+    toast('Loaded: ' + file.name, 'success');
   };
   reader.readAsText(file);
 }
 function clearFile() {
-  S.fileContent = ''; S.fileName = '';
-  document.getElementById('file-input').value = '';
+  S.fileContent = '';
+  document.getElementById('file-in').value = '';
   document.getElementById('drop-zone').style.display = '';
-  document.getElementById('file-info').style.display = 'none';
+  document.getElementById('file-chip').style.display = 'none';
 }
 
 // ── Generate ──
 async function generate() {
-  const apiKey = localStorage.getItem('tonik_api_key');
-  if (!apiKey) { toast('Set your Anthropic API key first', 'error'); openApiModal(); return; }
-
   let prompt = '';
   if (S.mode === 'create') {
     const name = document.getElementById('c-name').value.trim();
-    if (!name) { toast('Feature name is required', 'error'); document.getElementById('c-name').focus(); return; }
     const problem = document.getElementById('c-problem').value.trim();
+    if (!name)    { toast('Feature name is required', 'error'); document.getElementById('c-name').focus(); return; }
     if (!problem) { toast('Problem statement is required', 'error'); document.getElementById('c-problem').focus(); return; }
     prompt = makeCreatePrompt({ name, area: document.getElementById('c-area').value, priority: document.getElementById('c-priority').value, problem, goals: document.getElementById('c-goals').value.trim(), users: document.getElementById('c-users').value.trim(), requirements: document.getElementById('c-requirements').value.trim(), tech: document.getElementById('c-tech').value.trim(), context: document.getElementById('c-context').value.trim() });
   } else {
@@ -599,31 +514,32 @@ async function generate() {
     prompt = makeUpdatePrompt({ existing: S.fileContent, changes, context: document.getElementById('u-context').value.trim(), scope: document.getElementById('u-scope').value });
   }
 
-  const model = localStorage.getItem('tonik_model') || 'claude-sonnet-4-5-20251001';
-  S.generating = true; S.content = '';
-  const btn = document.getElementById('btn-gen');
+  const model = document.getElementById('model-pick').value;
+  const btn   = document.getElementById('btn-gen');
+  S.content   = '';
   btn.disabled = true;
-  btn.innerHTML = `<div class="spinner"></div><span>Generating…</span>`;
-  document.getElementById('streaming-bar').style.display = 'flex';
-  document.getElementById('streaming-msg').textContent = S.mode === 'create' ? 'Drafting your PRD with Claude AI…' : 'Updating your PRD with Claude AI…';
-  document.getElementById('output-actions').style.display = 'none';
-  document.getElementById('output-body').innerHTML = `<div class="preview-wrap" id="stream-preview"><em style="color:var(--muted)">Starting generation…</em></div>`;
+  btn.innerHTML = '<div class="spinner"></div><span>Generating…</span>';
+  document.getElementById('stream-bar').style.display = 'flex';
+  document.getElementById('stream-msg').textContent = S.mode === 'create' ? 'Drafting your PRD…' : 'Updating your PRD…';
+  document.getElementById('out-actions').style.display = 'none';
+  document.getElementById('out-body').innerHTML = '<div class="preview-wrap" id="stream-el"><em style="color:var(--muted)">Starting…</em></div>';
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/generate', {
       method: 'POST',
-      headers: { 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', 'anthropic-dangerous-allow-browser': 'true' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model, max_tokens: 8192, stream: true, system: SYSTEM_PROMPT, messages: [{ role: 'user', content: prompt }] }),
     });
+
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({}));
-      const msg = errBody.error?.message || `HTTP ${res.status} — ${res.statusText}`;
-      throw new Error(msg);
+      throw new Error(errBody.error?.message || `Server error ${res.status}`);
     }
 
     const reader = res.body.getReader();
     const dec = new TextDecoder();
     let buf = '';
+
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -636,35 +552,30 @@ async function generate() {
           const j = JSON.parse(d);
           if (j.type === 'content_block_delta' && j.delta?.type === 'text_delta') {
             S.content += j.delta.text;
-            const el = document.getElementById('stream-preview');
+            const el = document.getElementById('stream-el');
             if (el) el.innerHTML = marked.parse(S.content);
           }
         } catch {}
       }
     }
 
-    renderOutput();
-    document.getElementById('output-actions').style.display = 'flex';
-    toast('PRD generated successfully!', 'success');
+    renderOut();
+    document.getElementById('out-actions').style.display = 'flex';
+    toast('PRD generated!', 'success');
   } catch (e) {
-    const errMsg = e.message || 'Unknown error';
-    toast('Error: ' + errMsg, 'error', 8000);
-    document.getElementById('output-body').innerHTML = `
+    const msg = e.message || 'Unknown error';
+    toast('Error: ' + msg, 'error', 8000);
+    document.getElementById('out-body').innerHTML = `
       <div class="empty-state">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div class="empty-state-title" style="color:var(--danger)">Generation Failed</div>
-        <div class="empty-state-sub" style="color:var(--danger);background:var(--danger-light);padding:10px 16px;border-radius:6px;border:1px solid #fca5a5;font-family:monospace;font-size:12px;text-align:left;max-width:480px">${esc(errMsg)}</div>
-        <div class="empty-state-sub">Common fixes:<br>
-          • Make sure your API key is set (click the lock icon top-right)<br>
-          • Check your Anthropic account has credits<br>
-          • Try again — sometimes the API times out
-        </div>
+        <div class="empty-title" style="color:var(--danger)">Generation Failed</div>
+        <div style="font-size:12px;background:var(--danger-light);color:var(--danger);padding:10px 14px;border-radius:6px;border:1px solid #fca5a5;font-family:monospace;max-width:460px">${esc(msg)}</div>
+        <div class="empty-sub">Try refreshing the page or switching to a different model.</div>
       </div>`;
   } finally {
-    S.generating = false;
     btn.disabled = false;
     btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="gen-label">${S.mode === 'create' ? 'Generate PRD' : 'Update PRD'}</span>`;
-    document.getElementById('streaming-bar').style.display = 'none';
+    document.getElementById('stream-bar').style.display = 'none';
   }
 }
 
@@ -676,7 +587,7 @@ Always produce PRDs using this exact Tonik template:
 ---
 # [Feature Name] — Product Requirements Document
 
-**Version:** 1.0  |  **Status:** Draft  |  **Date:** ${new Date().toLocaleDateString('en-PH', {year:'numeric',month:'long',day:'numeric'})}  |  **Author:** Product Team
+**Version:** 1.0  |  **Status:** Draft  |  **Date:** ${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}  |  **Author:** Product Team
 **Product Area:** [area]  |  **Priority:** [priority]
 
 ---
@@ -761,7 +672,6 @@ Always produce PRDs using this exact Tonik template:
 
 ---
 *Document maintained by Tonik Product Team.*
----
 
 Rules:
 - Always use this full structure — never skip sections
@@ -795,7 +705,7 @@ ${d.tech || 'Not specified.'}
 **Additional Context:**
 ${d.context || 'None.'}
 
-Generate the full PRD. Where I have not provided explicit input, apply your product management expertise to make reasonable, well-reasoned assumptions for a digital bank serving the Philippines market.`;
+Generate the full PRD. Where input is sparse, apply your product management expertise to make reasonable, well-reasoned assumptions for a digital bank serving the Philippines market.`;
 }
 
 function makeUpdatePrompt(d) {
@@ -812,45 +722,34 @@ ${d.context || 'None.'}
 **Existing PRD:**
 ${d.existing}
 
-Output the complete updated PRD using the same Tonik template. ${d.scope === 'targeted' ? 'Keep all unchanged sections exactly as-is.' : 'Integrate all updates coherently throughout.'} Increment the version number to the next minor version.`;
+Output the complete updated PRD using the same Tonik template. ${d.scope === 'targeted' ? 'Keep all unchanged sections exactly as-is.' : 'Integrate all updates coherently throughout.'} Increment the version number.`;
 }
 
 // ── Actions ──
-function copyMarkdown() {
-  if (!S.content) return;
-  navigator.clipboard.writeText(S.content).then(() => toast('Copied to clipboard', 'success')).catch(() => toast('Copy failed', 'error'));
+function copyMd() {
+  navigator.clipboard.writeText(S.content)
+    .then(() => toast('Copied!', 'success'))
+    .catch(() => toast('Copy failed — try the Download button', 'error'));
 }
 function downloadMd() {
   if (!S.content) return;
-  const name = S.mode === 'create'
-    ? (document.getElementById('c-name').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-') || 'prd') + '-prd.md'
-    : (S.fileName.replace(/\.[^.]+$/,'') || 'updated-prd') + '.md';
-  const blob = new Blob([S.content], { type: 'text/markdown;charset=utf-8' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click();
-  URL.revokeObjectURL(a.href);
+  const name = (S.mode === 'create'
+    ? document.getElementById('c-name').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-') || 'prd'
+    : 'updated-prd') + '.md';
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(new Blob([S.content], { type: 'text/markdown;charset=utf-8' })),
+    download: name,
+  });
+  a.click(); URL.revokeObjectURL(a.href);
 }
 
 // ── Toast ──
-function toast(msg, type = 'info', ms = 4000) {
-  const c = document.getElementById('toasts');
+function toast(msg, type='info', ms=4000) {
   const d = document.createElement('div');
-  const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ';
   d.className = `toast ${type}`;
-  d.innerHTML = `<span>${icon}</span><span>${msg}</span>`;
-  c.appendChild(d);
+  d.innerHTML = `<span>${type==='success'?'✓':type==='error'?'✕':'ℹ'}</span><span>${msg}</span>`;
+  document.getElementById('toasts').appendChild(d);
   setTimeout(() => d.remove(), ms);
-}
-
-// ── Enter key on API modal ──
-document.getElementById('modal-api-key').addEventListener('keydown', e => { if (e.key === 'Enter') saveApiKey(); });
-
-// ── Init ──
-loadPrefs();
-// Show prompt if no API key on first visit
-if (!localStorage.getItem('tonik_api_key')) {
-  setTimeout(() => {
-    toast('👋 First time? Click the lock icon (top right) to set your Anthropic API key.', 'info', 8000);
-  }, 800);
 }
 </script>
 </body>
