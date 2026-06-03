@@ -8,270 +8,198 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --primary: #1A4FD8; --primary-dark: #1340B0; --primary-light: #eff6ff; --primary-mid: #dbeafe;
-  --success: #16a34a; --success-light: #dcfce7;
-  --danger: #dc2626; --danger-light: #fee2e2;
-  --warning: #d97706; --warning-light: #fef3c7;
-  --bg: #f1f5f9; --card: #ffffff; --border: #e2e8f0; --border-dark: #cbd5e1;
-  --text: #1e293b; --muted: #64748b; --subtle: #94a3b8;
-  --radius: 12px; --radius-sm: 7px;
+  --blue: #1A4FD8; --blue-d: #1340B0; --blue-l: #eff6ff; --blue-m: #dbeafe;
+  --green: #16a34a; --green-l: #dcfce7;
+  --red: #dc2626; --red-l: #fee2e2;
+  --bg: #f1f5f9; --card: #fff; --border: #e2e8f0; --border-d: #cbd5e1;
+  --text: #1e293b; --muted: #64748b; --faint: #94a3b8;
+  --r: 10px; --rs: 7px;
 }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-/* ── Header ── */
-.header {
-  background: linear-gradient(135deg, #1340B0 0%, #1A4FD8 60%, #2563eb 100%);
-  color: #fff; padding: 0 24px; height: 58px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: space-between;
-  box-shadow: 0 2px 16px rgba(26,79,216,.35); z-index: 50;
-}
-.header-brand { display: flex; align-items: center; gap: 12px; }
-.header-logo {
-  width: 34px; height: 34px; background: rgba(255,255,255,.18);
-  border: 1.5px solid rgba(255,255,255,.3); border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 900; font-size: 14px;
-}
-.header-title { font-size: 17px; font-weight: 800; }
-.header-sub { font-size: 11px; opacity: .6; margin-top: 1px; }
-.model-selector {
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
-  border-radius: 8px; padding: 5px 12px;
-}
-.model-selector label { font-size: 11px; opacity: .75; white-space: nowrap; }
-.model-selector select {
-  background: transparent; border: none; color: #fff; font-size: 12px;
-  font-weight: 600; cursor: pointer; outline: none;
-  appearance: none; padding-right: 14px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 0 center;
-}
-.model-selector select option { background: #1340B0; color: #fff; }
+/* Header */
+.hdr { background: linear-gradient(135deg,#1340B0,#1A4FD8 60%,#2563eb); color:#fff; height:56px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; box-shadow:0 2px 12px rgba(26,79,216,.3); }
+.hdr-brand { display:flex; align-items:center; gap:11px; }
+.hdr-logo { width:32px; height:32px; background:rgba(255,255,255,.18); border:1.5px solid rgba(255,255,255,.3); border-radius:7px; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; }
+.hdr-title { font-size:16px; font-weight:800; }
+.hdr-sub { font-size:10px; opacity:.6; margin-top:1px; }
+.hdr-badge { display:flex; align-items:center; gap:6px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); border-radius:20px; padding:4px 12px; font-size:11px; font-weight:600; }
+.hdr-badge-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; }
 
-/* ── Mode selector ── */
-.hero { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; flex-shrink: 0; }
-.hero-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 10px; }
-.mode-cards { display: flex; gap: 12px; }
-.mode-card {
-  flex: 1; max-width: 280px; padding: 13px 16px; border: 2px solid var(--border);
-  border-radius: var(--radius); cursor: pointer; transition: all .18s; background: var(--bg);
-  display: flex; align-items: flex-start; gap: 12px;
-}
-.mode-card:hover { border-color: var(--primary); background: var(--primary-light); }
-.mode-card.active { border-color: var(--primary); background: var(--primary-light); box-shadow: 0 0 0 3px rgba(26,79,216,.1); }
-.mode-icon {
-  width: 36px; height: 36px; border-radius: 8px; background: var(--primary-mid);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--primary);
-}
-.mode-card.active .mode-icon { background: var(--primary); color: #fff; }
-.mode-title { font-size: 13px; font-weight: 700; }
-.mode-desc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+/* Mode strip */
+.mode-strip { background:var(--card); border-bottom:1px solid var(--border); padding:12px 22px; display:flex; gap:10px; flex-shrink:0; }
+.mode-btn { display:flex; align-items:center; gap:10px; padding:10px 16px; border:2px solid var(--border); border-radius:var(--r); cursor:pointer; transition:all .15s; background:var(--bg); flex:1; max-width:260px; }
+.mode-btn:hover { border-color:var(--blue); background:var(--blue-l); }
+.mode-btn.on { border-color:var(--blue); background:var(--blue-l); box-shadow:0 0 0 3px rgba(26,79,216,.09); }
+.mode-icon { width:34px; height:34px; border-radius:7px; background:var(--blue-m); display:flex; align-items:center; justify-content:center; color:var(--blue); flex-shrink:0; }
+.mode-btn.on .mode-icon { background:var(--blue); color:#fff; }
+.mode-label { font-size:13px; font-weight:700; }
+.mode-desc { font-size:11px; color:var(--muted); margin-top:1px; }
 
-/* ── Workspace ── */
-.workspace { display: flex; flex: 1; overflow: hidden; }
+/* Workspace */
+.ws { display:flex; flex:1; overflow:hidden; }
 
-/* ── Input panel ── */
-.input-panel { width: 400px; flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-.input-scroll { flex: 1; overflow-y: auto; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
-.section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+/* Left panel */
+.lp { width:390px; flex-shrink:0; background:var(--card); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.lp-scroll { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:13px; }
 
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field-label { font-size: 12px; font-weight: 700; color: var(--text); }
-.req { color: var(--danger); margin-left: 2px; }
-.field-hint { font-size: 11px; color: var(--muted); line-height: 1.4; }
-.field-input {
-  padding: 9px 11px; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
-  font-size: 13px; background: #fff; color: var(--text); width: 100%;
-  transition: border-color .15s, box-shadow .15s; font-family: inherit;
-}
-.field-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,79,216,.08); }
-.field-input::placeholder { color: var(--subtle); }
-.field-textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
-.field-select {
-  appearance: none; cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px;
-}
-.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sec-head { font-size:10px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.7px; padding-bottom:9px; border-bottom:1px solid var(--border); margin-bottom:2px; }
+
+.f { display:flex; flex-direction:column; gap:4px; }
+.f label { font-size:12px; font-weight:700; color:var(--text); }
+.req { color:var(--red); }
+.hint { font-size:11px; color:var(--muted); line-height:1.4; }
+.inp { padding:8px 10px; border:1.5px solid var(--border); border-radius:var(--rs); font-size:13px; background:#fff; color:var(--text); width:100%; font-family:inherit; transition:border-color .15s, box-shadow .15s; }
+.inp:focus { outline:none; border-color:var(--blue); box-shadow:0 0 0 3px rgba(26,79,216,.08); }
+.inp::placeholder { color:var(--faint); }
+.ta { resize:vertical; min-height:72px; line-height:1.6; }
+.sel { appearance:none; cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 9px center; padding-right:27px; }
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+/* Tabs inside form */
+.tab-row { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:2px; }
+.ftab { padding:7px 14px; font-size:11px; font-weight:700; cursor:pointer; border-bottom:2px solid transparent; color:var(--muted); transition:all .15s; }
+.ftab:hover { color:var(--blue); }
+.ftab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.tab-panel { display:none; flex-direction:column; gap:13px; }
+.tab-panel.on { display:flex; }
 
 /* Upload */
-.upload-zone {
-  border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 20px;
-  text-align: center; cursor: pointer; transition: all .2s; background: var(--bg);
-}
-.upload-zone:hover, .upload-zone.drag-over { border-color: var(--primary); background: var(--primary-light); }
-.upload-zone input { display: none; }
-.upload-zone p { font-size: 13px; color: var(--muted); margin-top: 6px; }
-.upload-zone strong { color: var(--primary); }
-.upload-zone small { display: block; font-size: 11px; color: var(--subtle); margin-top: 3px; }
-.file-chip {
-  background: var(--primary-light); border: 1.5px solid var(--primary-mid);
-  border-radius: var(--radius-sm); padding: 9px 12px;
-  display: flex; align-items: center; gap: 9px;
-}
-.file-chip-name { font-size: 12px; font-weight: 600; flex: 1; word-break: break-all; }
-.file-chip-size { font-size: 11px; color: var(--muted); white-space: nowrap; }
-.btn-remove { background: none; border: none; color: var(--muted); cursor: pointer; padding: 2px 4px; border-radius: 4px; display: flex; }
-.btn-remove:hover { color: var(--danger); background: var(--danger-light); }
+.drop { border:2px dashed var(--border); border-radius:var(--rs); padding:18px; text-align:center; cursor:pointer; transition:all .18s; background:var(--bg); }
+.drop:hover, .drop.over { border-color:var(--blue); background:var(--blue-l); }
+.drop input { display:none; }
+.drop p { font-size:12px; color:var(--muted); margin-top:6px; }
+.drop strong { color:var(--blue); }
+.fchip { background:var(--blue-l); border:1.5px solid var(--blue-m); border-radius:var(--rs); padding:8px 12px; display:flex; align-items:center; gap:9px; }
+.fchip-name { font-size:12px; font-weight:600; flex:1; word-break:break-all; }
+.fchip-sz { font-size:11px; color:var(--muted); }
+.xbtn { background:none; border:none; color:var(--muted); cursor:pointer; padding:2px 3px; border-radius:4px; display:flex; }
+.xbtn:hover { color:var(--red); background:var(--red-l); }
 
 /* Footer */
-.input-footer { padding: 14px 18px; border-top: 1px solid var(--border); flex-shrink: 0; }
-.btn-generate {
-  width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none;
-  border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 9px;
-  transition: background .15s, box-shadow .15s;
-}
-.btn-generate:hover:not(:disabled) { background: var(--primary-dark); box-shadow: 0 4px 14px rgba(26,79,216,.35); }
-.btn-generate:disabled { background: var(--subtle); cursor: not-allowed; }
-.spinner { width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; flex-shrink: 0; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.lp-foot { padding:13px 16px; border-top:1px solid var(--border); flex-shrink:0; display:flex; flex-direction:column; gap:8px; }
+.btn-gen { width:100%; padding:12px; background:var(--blue); color:#fff; border:none; border-radius:var(--rs); font-size:14px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:background .15s; }
+.btn-gen:hover { background:var(--blue-d); }
+.btn-gen:disabled { background:var(--faint); cursor:not-allowed; }
+.btn-preview { width:100%; padding:8px; background:#fff; color:var(--blue); border:1.5px solid var(--blue); border-radius:var(--rs); font-size:12px; font-weight:700; cursor:pointer; transition:all .15s; }
+.btn-preview:hover { background:var(--blue-l); }
 
-/* ── Output panel ── */
-.output-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+/* Right panel */
+.rp { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.out-bar { border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 16px; flex-shrink:0; min-height:44px; background:var(--card); }
+.otab { padding:11px 13px; font-size:12px; font-weight:700; cursor:pointer; border-bottom:2px solid transparent; color:var(--muted); transition:all .15s; }
+.otab:hover { color:var(--blue); }
+.otab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.out-acts { margin-left:auto; display:flex; gap:6px; }
+.bsm { padding:5px 13px; border-radius:var(--rs); font-size:12px; font-weight:700; cursor:pointer; border:1.5px solid var(--border); background:#fff; color:var(--text); transition:all .15s; display:flex; align-items:center; gap:5px; white-space:nowrap; }
+.bsm:hover { border-color:var(--blue); color:var(--blue); background:var(--blue-l); }
+.bsm.p { background:var(--blue); color:#fff; border-color:var(--blue); }
+.bsm.p:hover { background:var(--blue-d); }
+.out-body { flex:1; overflow-y:auto; }
 
-.stream-bar {
-  padding: 8px 16px; background: var(--primary-light); border-bottom: 1px solid var(--primary-mid);
-  display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--primary); flex-shrink: 0;
-}
-.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); flex-shrink: 0;
-  animation: pulse .9s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
-
-.out-bar {
-  border-bottom: 1px solid var(--border); display: flex; align-items: center;
-  padding: 0 16px; flex-shrink: 0; min-height: 46px; background: var(--card);
-}
-.out-tab { padding: 12px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); transition: all .15s; white-space: nowrap; }
-.out-tab:hover { color: var(--primary); }
-.out-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
-.out-actions { margin-left: auto; display: flex; gap: 7px; }
-.btn-sm {
-  padding: 6px 13px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700;
-  cursor: pointer; border: 1.5px solid var(--border); background: #fff; color: var(--text);
-  transition: all .15s; display: flex; align-items: center; gap: 5px; white-space: nowrap;
-}
-.btn-sm:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-.btn-sm.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
-.btn-sm.primary:hover { background: var(--primary-dark); }
-.btn-sm:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
-
-.out-body { flex: 1; overflow-y: auto; }
-
-/* Empty state */
-.empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; gap: 14px; padding: 40px; text-align: center; }
-.empty-icon { color: var(--border-dark); }
-.empty-title { font-size: 16px; font-weight: 700; }
-.empty-sub { font-size: 13px; color: var(--muted); max-width: 340px; line-height: 1.6; }
-.steps { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; text-align: left; }
-.step { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--muted); }
-.step-n { width: 20px; height: 20px; border-radius: 50%; background: var(--primary-mid); color: var(--primary); font-weight: 800; font-size: 11px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+/* Empty */
+.empty { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:12px; padding:40px; text-align:center; }
+.empty svg { color:var(--border-d); }
+.empty-t { font-size:16px; font-weight:700; }
+.empty-s { font-size:13px; color:var(--muted); max-width:360px; line-height:1.6; }
+.steps { display:flex; flex-direction:column; gap:8px; text-align:left; margin-top:4px; }
+.step { display:flex; align-items:flex-start; gap:9px; font-size:12px; color:var(--muted); }
+.sn { width:20px; height:20px; border-radius:50%; background:var(--blue-m); color:var(--blue); font-weight:800; font-size:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
 
 /* Preview */
-.preview-wrap { padding: 32px 44px; max-width: 820px; margin: 0 auto; }
-.preview-wrap h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; padding-bottom: 14px; border-bottom: 3px solid var(--primary); }
-.preview-wrap h2 { font-size: 16px; font-weight: 700; color: var(--primary-dark); margin: 24px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
-.preview-wrap h3 { font-size: 14px; font-weight: 700; margin: 16px 0 6px; }
-.preview-wrap h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin: 12px 0 4px; }
-.preview-wrap p { line-height: 1.7; margin-bottom: 9px; }
-.preview-wrap ul, .preview-wrap ol { padding-left: 22px; margin-bottom: 10px; }
-.preview-wrap li { line-height: 1.7; margin-bottom: 3px; }
-.preview-wrap table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
-.preview-wrap th { background: var(--primary-light); color: var(--primary-dark); font-weight: 700; padding: 9px 13px; border: 1px solid var(--border); text-align: left; font-size: 12px; }
-.preview-wrap td { padding: 8px 13px; border: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
-.preview-wrap tr:nth-child(even) td { background: #f8fafc; }
-.preview-wrap code { background: #f1f5f9; border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 12px; font-family: 'Cascadia Code','Fira Code',monospace; }
-.preview-wrap pre { background: #f1f5f9; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; overflow-x: auto; margin: 10px 0; }
-.preview-wrap pre code { background: none; border: none; padding: 0; }
-.preview-wrap blockquote { border-left: 3px solid var(--primary); padding: 8px 14px; background: var(--primary-light); margin: 10px 0; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; color: var(--primary-dark); }
-.preview-wrap hr { border: none; border-top: 1px solid var(--border); margin: 22px 0; }
+.pv { padding:30px 42px; max-width:800px; margin:0 auto; }
+.pv h1 { font-size:21px; font-weight:800; padding-bottom:12px; border-bottom:3px solid var(--blue); margin-bottom:4px; }
+.pv h2 { font-size:15px; font-weight:700; color:var(--blue-d); margin:22px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+.pv h3 { font-size:13px; font-weight:700; margin:14px 0 5px; }
+.pv h4 { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin:10px 0 4px; }
+.pv p { line-height:1.7; margin-bottom:8px; }
+.pv ul, .pv ol { padding-left:20px; margin-bottom:10px; }
+.pv li { line-height:1.7; margin-bottom:3px; }
+.pv table { width:100%; border-collapse:collapse; margin:10px 0; font-size:13px; }
+.pv th { background:var(--blue-l); color:var(--blue-d); font-weight:700; padding:8px 12px; border:1px solid var(--border); text-align:left; font-size:12px; }
+.pv td { padding:7px 12px; border:1px solid var(--border); vertical-align:top; line-height:1.5; }
+.pv tr:nth-child(even) td { background:#f8fafc; }
+.pv code { background:#f1f5f9; border:1px solid var(--border); border-radius:4px; padding:1px 5px; font-size:12px; font-family:monospace; }
+.pv pre { background:#f1f5f9; border:1px solid var(--border); border-radius:var(--rs); padding:12px; overflow-x:auto; margin:10px 0; }
+.pv pre code { background:none; border:none; padding:0; }
+.pv blockquote { border-left:3px solid var(--blue); padding:8px 14px; background:var(--blue-l); margin:10px 0; border-radius:0 var(--rs) var(--rs) 0; color:var(--blue-d); }
+.pv hr { border:none; border-top:1px solid var(--border); margin:20px 0; }
+.pv strong { font-weight:700; }
 
 /* Raw */
-.raw-wrap { padding: 14px; height: 100%; display: flex; flex-direction: column; }
-.raw-wrap textarea { flex: 1; width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 14px; font-family: 'Cascadia Code','Fira Code','Consolas',monospace; font-size: 12px; line-height: 1.65; background: #f8fafc; resize: none; color: var(--text); }
-.raw-wrap textarea:focus { outline: none; border-color: var(--primary); }
+.raw { padding:14px; height:100%; display:flex; flex-direction:column; }
+.raw textarea { flex:1; width:100%; border:1.5px solid var(--border); border-radius:var(--rs); padding:14px; font-family:monospace; font-size:12px; line-height:1.65; background:#f8fafc; resize:none; color:var(--text); }
+.raw textarea:focus { outline:none; border-color:var(--blue); }
 
 /* Toasts */
-.toast-wrap { position: fixed; bottom: 20px; right: 20px; z-index: 300; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
-.toast { padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.14); display: flex; align-items: center; gap: 8px; animation: tin .2s ease; max-width: 380px; pointer-events: all; }
-@keyframes tin { from{transform:translateX(14px);opacity:0} to{transform:none;opacity:1} }
-.toast.success { background: var(--success-light); color: var(--success); border: 1px solid #86efac; }
-.toast.error   { background: var(--danger-light);  color: var(--danger);  border: 1px solid #fca5a5; }
-.toast.info    { background: var(--primary-light); color: var(--primary); border: 1px solid #93c5fd; }
+.toasts { position:fixed; bottom:18px; right:18px; z-index:200; display:flex; flex-direction:column; gap:7px; }
+.toast { padding:9px 15px; border-radius:var(--rs); font-size:12px; font-weight:600; box-shadow:0 4px 16px rgba(0,0,0,.12); display:flex; align-items:center; gap:8px; animation:tin .2s ease; }
+@keyframes tin { from{transform:translateX(12px);opacity:0} to{transform:none;opacity:1} }
+.toast.ok  { background:var(--green-l); color:var(--green); border:1px solid #86efac; }
+.toast.err { background:var(--red-l);   color:var(--red);   border:1px solid #fca5a5; }
+.toast.inf { background:var(--blue-l);  color:var(--blue);  border:1px solid #93c5fd; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 4px; }
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:var(--border-d); border-radius:4px; }
 </style>
 </head>
 <body>
 
-<!-- Header -->
-<header class="header">
-  <div class="header-brand">
-    <div class="header-logo">T</div>
+<header class="hdr">
+  <div class="hdr-brand">
+    <div class="hdr-logo">T</div>
     <div>
-      <div class="header-title">PRD Portal</div>
-      <div class="header-sub">Tonik Financial · Powered by Claude AI</div>
+      <div class="hdr-title">PRD Portal</div>
+      <div class="hdr-sub">Tonik Financial · Product Requirements</div>
     </div>
   </div>
-  <div class="model-selector">
-    <label for="model-pick">Model:</label>
-    <select id="model-pick">
-      <option value="claude-sonnet-4-5-20251001">Sonnet 4.5 — Recommended</option>
-      <option value="claude-opus-4-5-20251101">Opus 4.5 — Most thorough</option>
-      <option value="claude-haiku-4-5-20251001">Haiku 4.5 — Fastest</option>
-    </select>
+  <div class="hdr-badge">
+    <div class="hdr-badge-dot"></div>
+    No login required
   </div>
 </header>
 
-<!-- Mode selector -->
-<div class="hero">
-  <div class="hero-label">What would you like to do?</div>
-  <div class="mode-cards">
-    <div class="mode-card active" id="card-create" onclick="switchMode('create')">
-      <div class="mode-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
-      </div>
-      <div>
-        <div class="mode-title">Create New PRD</div>
-        <div class="mode-desc">Draft a complete Tonik PRD from scratch using Claude AI</div>
-      </div>
+<!-- Mode -->
+<div class="mode-strip">
+  <div class="mode-btn on" id="mb-create" onclick="setMode('create')">
+    <div class="mode-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
     </div>
-    <div class="mode-card" id="card-update" onclick="switchMode('update')">
-      <div class="mode-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
-      </div>
-      <div>
-        <div class="mode-title">Update Existing PRD</div>
-        <div class="mode-desc">Upload a PRD file and revise it with new context</div>
-      </div>
+    <div>
+      <div class="mode-label">Create New PRD</div>
+      <div class="mode-desc">Fill in the form and generate a structured PRD</div>
+    </div>
+  </div>
+  <div class="mode-btn" id="mb-update" onclick="setMode('update')">
+    <div class="mode-icon">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></svg>
+    </div>
+    <div>
+      <div class="mode-label">Update Existing PRD</div>
+      <div class="mode-desc">Upload a PRD and edit it directly</div>
     </div>
   </div>
 </div>
 
-<!-- Workspace -->
-<div class="workspace">
+<div class="ws">
 
-  <!-- Input panel -->
-  <div class="input-panel">
-    <div class="input-scroll" id="input-scroll">
+  <!-- Left panel -->
+  <div class="lp">
+    <div class="lp-scroll" id="lp-scroll">
 
-      <!-- CREATE -->
-      <div id="form-create">
-        <div class="section-label">Feature Details</div>
+      <!-- CREATE FORM -->
+      <div id="fp-create">
+        <div class="sec-head">Document Info</div>
 
-        <div class="field">
-          <label class="field-label">Feature / Product Name <span class="req">*</span></label>
-          <input class="field-input" type="text" id="c-name" placeholder="e.g. Loan Restructuring Self-Service" maxlength="120">
+        <div class="f">
+          <label>Feature / Product Name <span class="req">*</span></label>
+          <input class="inp" id="c-name" type="text" placeholder="e.g. Loan Restructuring Self-Service" maxlength="120" oninput="liveRefresh()">
         </div>
 
-        <div class="row-2">
-          <div class="field">
-            <label class="field-label">Product Area</label>
-            <select class="field-input field-select" id="c-area">
+        <div class="g2">
+          <div class="f">
+            <label>Product Area</label>
+            <select class="inp sel" id="c-area" onchange="liveRefresh()">
               <option value="">Select area</option>
               <option>Loans</option><option>Savings</option><option>Payments</option>
               <option>Onboarding</option><option>Authentication</option><option>Dashboard</option>
@@ -279,9 +207,9 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
               <option>Compliance / KYC</option><option>Analytics</option><option>Other</option>
             </select>
           </div>
-          <div class="field">
-            <label class="field-label">Priority</label>
-            <select class="field-input field-select" id="c-priority">
+          <div class="f">
+            <label>Priority</label>
+            <select class="inp sel" id="c-priority" onchange="liveRefresh()">
               <option value="P0 – Critical">P0 – Critical</option>
               <option value="P1 – High" selected>P1 – High</option>
               <option value="P2 – Medium">P2 – Medium</option>
@@ -290,466 +218,550 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
           </div>
         </div>
 
-        <div class="field">
-          <label class="field-label">Problem Statement <span class="req">*</span></label>
-          <div class="field-hint">What problem are we solving? Who is affected and what is the business impact?</div>
-          <textarea class="field-input field-textarea" id="c-problem" rows="4"
-            placeholder="e.g. Customers with overdue loans have no self-service option to request restructuring, leading to high call center volumes and increased default risk..."></textarea>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Goals &amp; Success Metrics</label>
-          <div class="field-hint">What does success look like? Include KPI targets if known.</div>
-          <textarea class="field-input field-textarea" id="c-goals" rows="3"
-            placeholder="e.g. Reduce loan defaults by 15%, deflect 30% of restructuring calls to self-service..."></textarea>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Target Users</label>
-          <input class="field-input" type="text" id="c-users" placeholder="e.g. Tonik borrowers with active loans, 25–45 age, mobile-first">
-        </div>
-
-        <div class="field">
-          <label class="field-label">Key Requirements / Features</label>
-          <div class="field-hint">List the main capabilities, one per line.</div>
-          <textarea class="field-input field-textarea" id="c-requirements" rows="5"
-            placeholder="- View loan details and overdue status&#10;- Submit restructuring request&#10;- OTP verification&#10;- Real-time status tracking&#10;- Agent review workflow"></textarea>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Technical Context / Constraints</label>
-          <textarea class="field-input field-textarea" id="c-tech" rows="2"
-            placeholder="e.g. Must use existing Loan API, Android/iOS only..."></textarea>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Additional Context</label>
-          <textarea class="field-input field-textarea" id="c-context" rows="3"
-            placeholder="Stakeholder inputs, regulatory requirements, research findings..."></textarea>
-        </div>
-      </div>
-
-      <!-- UPDATE -->
-      <div id="form-update" style="display:none">
-        <div class="section-label">Upload Existing PRD</div>
-
-        <div id="drop-wrap">
-          <div class="upload-zone" id="drop-zone"
-               onclick="document.getElementById('file-in').click()"
-               ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
-            <input type="file" id="file-in" accept=".md,.markdown,.txt" onchange="onFilePick(event)">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--subtle)" stroke-width="1.5">
-              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
-              <line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
-            </svg>
-            <p><strong>Click to upload</strong> or drag &amp; drop</p>
-            <small>.md · .txt</small>
+        <div class="g2">
+          <div class="f">
+            <label>Author</label>
+            <input class="inp" id="c-author" type="text" placeholder="Your name" oninput="liveRefresh()">
           </div>
-          <div class="file-chip" id="file-chip" style="display:none">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-            <span class="file-chip-name" id="file-name">—</span>
-            <span class="file-chip-size" id="file-size">—</span>
-            <button class="btn-remove" onclick="clearFile()" title="Remove">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
+          <div class="f">
+            <label>Version</label>
+            <input class="inp" id="c-version" type="text" placeholder="1.0" value="1.0" oninput="liveRefresh()">
           </div>
         </div>
 
-        <div class="field" style="margin-top:4px">
-          <label class="field-label">What to Update <span class="req">*</span></label>
-          <div class="field-hint">Describe changes, new sections, corrections, or additions needed.</div>
-          <textarea class="field-input field-textarea" id="u-changes" rows="5"
-            placeholder="e.g. Add fraud detection requirements, update success metrics to new OKRs, revise out-of-scope section..."></textarea>
-        </div>
-
-        <div class="field">
-          <label class="field-label">New Context / Information</label>
-          <div class="field-hint">Paste meeting notes, research, stakeholder feedback, or regulatory updates.</div>
-          <textarea class="field-input field-textarea" id="u-context" rows="4"
-            placeholder="Meeting notes, new requirements, compliance updates..."></textarea>
-        </div>
-
-        <div class="field">
-          <label class="field-label">Update Scope</label>
-          <select class="field-input field-select" id="u-scope">
-            <option value="targeted">Targeted — update only the specified sections</option>
-            <option value="full">Full revision — rewrite with all changes integrated</option>
+        <div class="f">
+          <label>Status</label>
+          <select class="inp sel" id="c-status" onchange="liveRefresh()">
+            <option>Draft</option><option>In Review</option><option>Approved</option><option>Deprecated</option>
           </select>
         </div>
-      </div>
 
-    </div><!-- /input-scroll -->
+        <!-- Tabbed sections -->
+        <div class="sec-head" style="margin-top:4px">PRD Sections</div>
+        <div class="tab-row">
+          <div class="ftab on" id="ft0" onclick="switchFTab(0)">Overview</div>
+          <div class="ftab" id="ft1" onclick="switchFTab(1)">Users</div>
+          <div class="ftab" id="ft2" onclick="switchFTab(2)">Requirements</div>
+          <div class="ftab" id="ft3" onclick="switchFTab(3)">Delivery</div>
+        </div>
 
-    <div class="input-footer">
-      <button class="btn-generate" id="btn-gen" onclick="generate()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <span id="gen-label">Generate PRD</span>
+        <!-- Tab 0: Overview -->
+        <div class="tab-panel on" id="ft-panel-0">
+          <div class="f">
+            <label>Problem Statement <span class="req">*</span></label>
+            <div class="hint">What problem are we solving? Who is affected?</div>
+            <textarea class="inp ta" id="c-problem" rows="4"
+              placeholder="e.g. Customers with overdue loans have no self-service option to request restructuring, leading to high call center volumes and increased default risk." oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Executive Summary</label>
+            <div class="hint">Brief overview of the feature and its value.</div>
+            <textarea class="inp ta" id="c-summary" rows="3"
+              placeholder="e.g. A self-service loan restructuring module within the Tonik app that allows borrowers to request revised payment terms..." oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Business Goals</label>
+            <div class="hint">One goal per line.</div>
+            <textarea class="inp ta" id="c-goals" rows="3"
+              placeholder="Reduce loan default rate by 15%&#10;Deflect 30% of restructuring calls to self-service&#10;Improve borrower NPS by 10 points" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Success Metrics / KPIs</label>
+            <div class="hint">Format: Metric | Baseline | Target | Timeline (one per line)</div>
+            <textarea class="inp ta" id="c-kpis" rows="4"
+              placeholder="Default rate | 8% | 6.8% | Q4 2025&#10;Self-service adoption | 0% | 30% | Q4 2025&#10;NPS score | 42 | 52 | Q1 2026" oninput="liveRefresh()"></textarea>
+          </div>
+        </div>
+
+        <!-- Tab 1: Users -->
+        <div class="tab-panel" id="ft-panel-1">
+          <div class="f">
+            <label>Primary Users</label>
+            <textarea class="inp ta" id="c-primary-users" rows="3"
+              placeholder="Tonik borrowers with active personal loans, aged 25–45, mobile-first users in the Philippines who may have payment difficulties." oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Secondary Users</label>
+            <textarea class="inp ta" id="c-secondary-users" rows="2"
+              placeholder="Tonik loan operations agents who review and approve restructuring requests." oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>User Stories</label>
+            <div class="hint">Format: As a [role] | I want to [action] | So that [benefit] | Priority (one per line)</div>
+            <textarea class="inp ta" id="c-stories" rows="5"
+              placeholder="Borrower | View my current loan status and overdue amount | I can understand my financial situation | P0&#10;Borrower | Submit a restructuring request with preferred terms | I can avoid default | P0&#10;Agent | Review submitted restructuring requests | I can approve or reject them | P1" oninput="liveRefresh()"></textarea>
+          </div>
+        </div>
+
+        <!-- Tab 2: Requirements -->
+        <div class="tab-panel" id="ft-panel-2">
+          <div class="f">
+            <label>Functional Requirements</label>
+            <div class="hint">One requirement per line. Start with P0/P1/P2 to set priority, e.g. <em>P0 | Display overdue loan details</em></div>
+            <textarea class="inp ta" id="c-func-req" rows="7"
+              placeholder="P0 | Display overdue loan details (principal, interest, penalties)&#10;P0 | Allow borrower to select new repayment term (3/6/12 months)&#10;P0 | OTP verification before submission&#10;P1 | Real-time application status tracking&#10;P1 | Push notification on status update&#10;P2 | Downloadable restructuring agreement PDF" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Non-Functional Requirements</label>
+            <div class="hint">Format: Category | Requirement | Target (one per line)</div>
+            <textarea class="inp ta" id="c-nfr" rows="4"
+              placeholder="Performance | API response time | &lt; 2s p95&#10;Availability | Service uptime | 99.9%&#10;Security | Data encryption | AES-256 at rest, TLS 1.3 in transit&#10;Scalability | Concurrent users | 10,000" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>UX / Design Requirements</label>
+            <textarea class="inp ta" id="c-ux" rows="3"
+              placeholder="Mobile-first (Android & iOS)&#10;Accessible — WCAG 2.1 AA&#10;Maximum 3 steps to submit a request&#10;Clear error states and loading indicators" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Technical Considerations</label>
+            <textarea class="inp ta" id="c-tech" rows="3"
+              placeholder="Must integrate with existing Loan Servicing API&#10;OTP via existing SMS gateway&#10;No web version in v1.0" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Dependencies &amp; Integrations</label>
+            <div class="hint">Format: System | Type | Owner | Status (one per line)</div>
+            <textarea class="inp ta" id="c-deps" rows="3"
+              placeholder="Core Banking System | REST API | Engineering | Existing&#10;SMS Gateway | REST API | Platform | Existing&#10;Push Notification Service | SDK | Mobile | Existing" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Out of Scope (v1.0)</label>
+            <div class="hint">One item per line.</div>
+            <textarea class="inp ta" id="c-oos" rows="3"
+              placeholder="Web browser support&#10;Automatic approval without agent review&#10;Restructuring for credit card products" oninput="liveRefresh()"></textarea>
+          </div>
+        </div>
+
+        <!-- Tab 3: Delivery -->
+        <div class="tab-panel" id="ft-panel-3">
+          <div class="f">
+            <label>Risks &amp; Mitigations</label>
+            <div class="hint">Format: Risk | Likelihood | Impact | Mitigation (one per line)</div>
+            <textarea class="inp ta" id="c-risks" rows="4"
+              placeholder="High self-service abandonment rate | Medium | High | Conduct usability testing pre-launch&#10;Core banking API delays | Low | High | Build queue-based fallback mechanism&#10;Regulatory non-compliance | Low | Critical | Legal review before launch" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Timeline &amp; Milestones</label>
+            <div class="hint">Format: Milestone | Target Date | Owner (one per line)</div>
+            <textarea class="inp ta" id="c-timeline" rows="4"
+              placeholder="PRD sign-off | July 15, 2025 | PM&#10;Design complete | August 1, 2025 | Design&#10;Engineering complete | September 15, 2025 | Engineering&#10;QA complete | September 30, 2025 | QA&#10;Launch | October 15, 2025 | PM" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Open Questions</label>
+            <div class="hint">Format: Question | Owner | Due Date (one per line)</div>
+            <textarea class="inp ta" id="c-oq" rows="3"
+              placeholder="What is the maximum number of restructuring requests per borrower? | PM | July 10&#10;Does BSP require disclosure before restructuring? | Legal | July 12" oninput="liveRefresh()"></textarea>
+          </div>
+          <div class="f">
+            <label>Appendix / References</label>
+            <textarea class="inp ta" id="c-appendix" rows="2"
+              placeholder="BSP Circular 1133 — Loan Restructuring Guidelines&#10;Tonik Borrower Research Report, May 2025" oninput="liveRefresh()"></textarea>
+          </div>
+        </div>
+
+      </div><!-- /fp-create -->
+
+      <!-- UPDATE FORM -->
+      <div id="fp-update" style="display:none">
+        <div class="sec-head">Upload Your PRD</div>
+
+        <div id="drop-z" class="drop"
+             onclick="document.getElementById('fi').click()"
+             ondragover="ev(event,'over')" ondragleave="ev(event,'out')" ondrop="ev(event,'drop')">
+          <input type="file" id="fi" accept=".md,.markdown,.txt" onchange="pickFile(event)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
+          </svg>
+          <p><strong>Click to upload</strong> or drag &amp; drop<br><span style="font-size:11px;color:var(--faint)">.md · .txt</span></p>
+        </div>
+        <div class="fchip" id="fchip" style="display:none">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span class="fchip-name" id="fname"></span>
+          <span class="fchip-sz" id="fsz"></span>
+          <button class="xbtn" onclick="clearFile()" title="Remove">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="sec-head" style="margin-top:4px">Edit Content</div>
+        <div class="hint" style="margin-top:-6px">The file content loads below. Edit directly, then click <strong>Apply Changes</strong>.</div>
+        <div class="f">
+          <textarea class="inp ta" id="u-editor" rows="22" style="min-height:360px;font-family:monospace;font-size:12px;line-height:1.6"
+            placeholder="Upload a .md file above to load its content here for editing…" oninput="S.updContent=this.value"></textarea>
+        </div>
+      </div><!-- /fp-update -->
+
+    </div><!-- /lp-scroll -->
+
+    <div class="lp-foot">
+      <button class="btn-gen" id="btn-main" onclick="buildPRD()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span id="btn-label">Build PRD</span>
       </button>
     </div>
-  </div><!-- /input-panel -->
+  </div><!-- /lp -->
 
-  <!-- Output panel -->
-  <div class="output-panel">
-    <div class="stream-bar" id="stream-bar" style="display:none">
-      <div class="pulse"></div>
-      <span id="stream-msg">Generating PRD with Claude AI…</span>
-    </div>
+  <!-- Right panel -->
+  <div class="rp">
     <div class="out-bar">
-      <div class="out-tab active" id="tab-preview" onclick="switchTab('preview')">Preview</div>
-      <div class="out-tab" id="tab-raw" onclick="switchTab('raw')">Markdown</div>
-      <div class="out-actions" id="out-actions" style="display:none">
-        <button class="btn-sm" onclick="copyMd()">
+      <div class="otab on" id="ot-preview" onclick="setOTab('preview')">Preview</div>
+      <div class="otab" id="ot-raw" onclick="setOTab('raw')">Markdown</div>
+      <div class="out-acts" id="oacts" style="display:none">
+        <button class="bsm" onclick="copyMd()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
           Copy
         </button>
-        <button class="btn-sm primary" onclick="downloadMd()">
+        <button class="bsm p" onclick="dlMd()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download .md
         </button>
       </div>
     </div>
     <div class="out-body" id="out-body">
-      <div class="empty-state">
-        <svg class="empty-icon" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+      <div class="empty" id="empty-state">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
           <polyline points="14 2 14 8 20 8"/>
-          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
         </svg>
-        <div class="empty-title">Your PRD will appear here</div>
-        <div class="empty-sub">Fill in the form and click <strong>Generate PRD</strong> to draft a complete Tonik PRD with Claude AI — no setup needed.</div>
+        <div class="empty-t">Your PRD will appear here</div>
+        <div class="empty-s">Fill in the form on the left and click <strong>Build PRD</strong>. No login or API key needed.</div>
         <div class="steps">
-          <div class="step"><div class="step-n">1</div><span>Choose <strong>Create</strong> or <strong>Update</strong> mode</span></div>
-          <div class="step"><div class="step-n">2</div><span>Fill in the feature details on the left</span></div>
-          <div class="step"><div class="step-n">3</div><span>Click <strong>Generate PRD</strong> and watch it stream in</span></div>
-          <div class="step"><div class="step-n">4</div><span>Download the finished <code>.md</code> file</span></div>
+          <div class="step"><div class="sn">1</div><span>Enter the feature name &amp; problem statement</span></div>
+          <div class="step"><div class="sn">2</div><span>Fill in Goals, Users, Requirements, and Delivery tabs</span></div>
+          <div class="step"><div class="sn">3</div><span>Click <strong>Build PRD</strong> to generate the full document</span></div>
+          <div class="step"><div class="sn">4</div><span>Download as <code>.md</code> or copy to clipboard</span></div>
         </div>
       </div>
     </div>
-  </div><!-- /output-panel -->
+  </div>
 
-</div><!-- /workspace -->
+</div><!-- /ws -->
 
-<div class="toast-wrap" id="toasts"></div>
+<div class="toasts" id="toasts"></div>
 
 <script>
-const S = { mode: 'create', tab: 'preview', content: '', fileContent: '' };
+const S = { mode:'create', otab:'preview', md:'', updContent:'' };
+const today = new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'});
 
 // ── Mode ──
-function switchMode(m) {
+function setMode(m) {
   S.mode = m;
   ['create','update'].forEach(x => {
-    document.getElementById('card-' + x).classList.toggle('active', x === m);
-    document.getElementById('form-' + x).style.display = x === m ? 'block' : 'none';
+    document.getElementById('mb-'+x).classList.toggle('on', x===m);
+    document.getElementById('fp-'+x).style.display = x===m ? 'block':'none';
   });
-  document.getElementById('gen-label').textContent = m === 'create' ? 'Generate PRD' : 'Update PRD';
+  document.getElementById('btn-label').textContent = m==='create' ? 'Build PRD' : 'Apply Changes';
+}
+
+// ── Form tabs ──
+function switchFTab(i) {
+  [0,1,2,3].forEach(j => {
+    document.getElementById('ft'+j).classList.toggle('on', j===i);
+    document.getElementById('ft-panel-'+j).classList.toggle('on', j===i);
+  });
 }
 
 // ── Output tabs ──
-function switchTab(t) {
-  S.tab = t;
-  document.getElementById('tab-preview').classList.toggle('active', t === 'preview');
-  document.getElementById('tab-raw').classList.toggle('active', t === 'raw');
+function setOTab(t) {
+  S.otab = t;
+  document.getElementById('ot-preview').classList.toggle('on', t==='preview');
+  document.getElementById('ot-raw').classList.toggle('on', t==='raw');
   renderOut();
 }
 function renderOut() {
-  if (!S.content) return;
+  if (!S.md) return;
   const el = document.getElementById('out-body');
-  if (S.tab === 'preview') {
-    el.innerHTML = `<div class="preview-wrap">${marked.parse(S.content)}</div>`;
+  if (S.otab==='preview') {
+    el.innerHTML = `<div class="pv">${marked.parse(S.md)}</div>`;
   } else {
-    el.innerHTML = `<div class="raw-wrap"><textarea spellcheck="false" oninput="S.content=this.value">${esc(S.content)}</textarea></div>`;
+    el.innerHTML = `<div class="raw"><textarea spellcheck="false" oninput="S.md=this.value">${esc(S.md)}</textarea></div>`;
   }
 }
 function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-// ── File upload ──
-function onDragOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('drag-over'); }
-function onDragLeave()  { document.getElementById('drop-zone').classList.remove('drag-over'); }
-function onDrop(e)      { e.preventDefault(); onDragLeave(); const f = e.dataTransfer.files[0]; if (f) readFile(f); }
-function onFilePick(e)  { const f = e.target.files[0]; if (f) readFile(f); }
-function readFile(file) {
-  new FileReader().onload = ev => {
-    S.fileContent = ev.target.result;
-    document.getElementById('drop-zone').style.display = 'none';
-    document.getElementById('file-chip').style.display = 'flex';
-    document.getElementById('file-name').textContent = file.name;
-    document.getElementById('file-size').textContent = (file.size/1024).toFixed(1) + ' KB';
-    toast('Loaded: ' + file.name, 'success');
-  };
-  (new FileReader()).readAsText(file);
+// ── Live refresh (light version while typing) ──
+let liveTimer;
+function liveRefresh() {
+  clearTimeout(liveTimer);
+  liveTimer = setTimeout(() => { if (S.md) buildPRD(true); }, 600);
 }
-// Fix: re-attach onload
-function readFile(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    S.fileContent = ev.target.result;
-    document.getElementById('drop-zone').style.display = 'none';
-    document.getElementById('file-chip').style.display = 'flex';
-    document.getElementById('file-name').textContent = file.name;
-    document.getElementById('file-size').textContent = (file.size/1024).toFixed(1) + ' KB';
-    toast('Loaded: ' + file.name, 'success');
+
+// ── File upload ──
+function ev(e, type) {
+  e.preventDefault();
+  if (type==='over') document.getElementById('drop-z').classList.add('over');
+  else if (type==='out') document.getElementById('drop-z').classList.remove('over');
+  else { document.getElementById('drop-z').classList.remove('over'); loadFile(e.dataTransfer.files[0]); }
+}
+function pickFile(e) { loadFile(e.target.files[0]); }
+function loadFile(file) {
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    S.updContent = ev.target.result;
+    document.getElementById('u-editor').value = S.updContent;
+    document.getElementById('drop-z').style.display = 'none';
+    document.getElementById('fchip').style.display = 'flex';
+    document.getElementById('fname').textContent = file.name;
+    document.getElementById('fsz').textContent = (file.size/1024).toFixed(1)+' KB';
+    toast('Loaded: '+file.name,'ok');
   };
-  reader.readAsText(file);
+  r.readAsText(file);
 }
 function clearFile() {
-  S.fileContent = '';
-  document.getElementById('file-in').value = '';
-  document.getElementById('drop-zone').style.display = '';
-  document.getElementById('file-chip').style.display = 'none';
+  S.updContent = '';
+  document.getElementById('fi').value = '';
+  document.getElementById('u-editor').value = '';
+  document.getElementById('drop-z').style.display = '';
+  document.getElementById('fchip').style.display = 'none';
 }
 
-// ── Generate ──
-async function generate() {
-  let prompt = '';
-  if (S.mode === 'create') {
-    const name = document.getElementById('c-name').value.trim();
-    const problem = document.getElementById('c-problem').value.trim();
-    if (!name)    { toast('Feature name is required', 'error'); document.getElementById('c-name').focus(); return; }
-    if (!problem) { toast('Problem statement is required', 'error'); document.getElementById('c-problem').focus(); return; }
-    prompt = makeCreatePrompt({ name, area: document.getElementById('c-area').value, priority: document.getElementById('c-priority').value, problem, goals: document.getElementById('c-goals').value.trim(), users: document.getElementById('c-users').value.trim(), requirements: document.getElementById('c-requirements').value.trim(), tech: document.getElementById('c-tech').value.trim(), context: document.getElementById('c-context').value.trim() });
-  } else {
-    if (!S.fileContent) { toast('Upload a PRD file first', 'error'); return; }
-    const changes = document.getElementById('u-changes').value.trim();
-    if (!changes) { toast('Describe what to update', 'error'); document.getElementById('u-changes').focus(); return; }
-    prompt = makeUpdatePrompt({ existing: S.fileContent, changes, context: document.getElementById('u-context').value.trim(), scope: document.getElementById('u-scope').value });
+// ── Helpers: parse list inputs ──
+function lines(id) {
+  return (document.getElementById(id)?.value || '')
+    .split('\n').map(l=>l.trim()).filter(Boolean);
+}
+function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function parseTable(id, cols) {
+  // each line: col1 | col2 | col3 ...
+  const rows = lines(id);
+  if (!rows.length) return '';
+  const header = '| ' + cols.join(' | ') + ' |\n|' + cols.map(()=>'---|').join('') + '\n';
+  const body = rows.map(r => {
+    const parts = r.split('|').map(p=>p.trim());
+    while (parts.length < cols.length) parts.push('—');
+    return '| ' + parts.slice(0, cols.length).join(' | ') + ' |';
+  }).join('\n');
+  return header + body;
+}
+
+function bulletList(id) {
+  const ls = lines(id);
+  return ls.length ? ls.map(l=>'- '+l).join('\n') : '- To be defined';
+}
+
+function parseFuncReq(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| ID | Requirement | Priority | Acceptance Criteria |\n|----|-------------|----------|---------------------|\n| FR-01 | To be defined | P1 | Given… When… Then… |';
+  return '| ID | Requirement | Priority | Acceptance Criteria |\n|----|-------------|----------|---------------------|\n' +
+    ls.map((l,i) => {
+      const parts = l.split('|').map(p=>p.trim());
+      const priority = parts[0]?.match(/^P[0-3]/i) ? parts[0].toUpperCase() : 'P1';
+      const req = parts[1] || parts[0];
+      return `| FR-${String(i+1).padStart(2,'0')} | ${req} | ${priority} | Given the user is logged in, when they complete this action, then the system responds as expected. |`;
+    }).join('\n');
+}
+
+function parseStories(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| ID | As a… | I want to… | So that… | Priority |\n|----|-------|-----------|----------|----------|\n| US-01 | Tonik borrower | use this feature | I can accomplish my goal | P1 |';
+  return '| ID | As a… | I want to… | So that… | Priority |\n|----|-------|-----------|----------|----------|\n' +
+    ls.map((l,i) => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| US-${String(i+1).padStart(2,'0')} | ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} | ${p[3]||'P1'} |`;
+    }).join('\n');
+}
+
+function parseKPIs(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| Metric | Baseline | Target | Measurement Window |\n|--------|----------|--------|--------------------|\n| To be defined | — | — | — |';
+  return '| Metric | Baseline | Target | Measurement Window |\n|--------|----------|--------|--------------------|\n' +
+    ls.map(l => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} | ${p[3]||'—'} |`;
+    }).join('\n');
+}
+
+function parseNFR(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| Category | Requirement | Target |\n|----------|-------------|--------|\n| Performance | API response time | < 2s p95 |\n| Availability | Uptime | 99.9% |\n| Security | Encryption | AES-256 at rest, TLS 1.3 in transit |';
+  return '| Category | Requirement | Target |\n|----------|-------------|--------|\n' +
+    ls.map(l => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} |`;
+    }).join('\n');
+}
+
+function parseDeps(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| System | Integration Type | Owner | Status |\n|--------|-----------------|-------|--------|\n| To be defined | — | — | — |';
+  return '| System | Integration Type | Owner | Status |\n|--------|-----------------|-------|--------|\n' +
+    ls.map(l => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} | ${p[3]||'—'} |`;
+    }).join('\n');
+}
+
+function parseRisks(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| Risk | Likelihood | Impact | Mitigation |\n|------|-----------|--------|------------|\n| To be defined | Medium | Medium | To be defined |';
+  return '| Risk | Likelihood | Impact | Mitigation |\n|------|-----------|--------|------------|\n' +
+    ls.map(l => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} | ${p[3]||'—'} |`;
+    }).join('\n');
+}
+
+function parseTimeline(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| Milestone | Target Date | Owner |\n|-----------|-------------|-------|\n| PRD sign-off | TBD | PM |\n| Design complete | TBD | Design |\n| Engineering complete | TBD | Engineering |\n| Launch | TBD | PM |';
+  return '| Milestone | Target Date | Owner |\n|-----------|-------------|-------|\n' +
+    ls.map(l => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} |`;
+    }).join('\n');
+}
+
+function parseOQ(id) {
+  const ls = lines(id);
+  if (!ls.length) return '| # | Question | Owner | Due |\n|---|----------|-------|-----|\n| 1 | To be defined | PM | TBD |';
+  return '| # | Question | Owner | Due |\n|---|----------|-------|-----|\n' +
+    ls.map((l,i) => {
+      const p = l.split('|').map(x=>x.trim());
+      return `| ${i+1} | ${p[0]||'—'} | ${p[1]||'—'} | ${p[2]||'—'} |`;
+    }).join('\n');
+}
+
+// ── Build PRD ──
+function buildPRD(silent=false) {
+  if (S.mode==='update') {
+    const content = document.getElementById('u-editor').value.trim();
+    if (!content) { if (!silent) toast('No content to preview — upload or type in the editor','err'); return; }
+    S.md = content;
+    showOutput();
+    if (!silent) toast('Changes applied','ok');
+    return;
   }
 
-  const model = document.getElementById('model-pick').value;
-  const btn   = document.getElementById('btn-gen');
-  S.content   = '';
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div><span>Generating…</span>';
-  document.getElementById('stream-bar').style.display = 'flex';
-  document.getElementById('stream-msg').textContent = S.mode === 'create' ? 'Drafting your PRD…' : 'Updating your PRD…';
-  document.getElementById('out-actions').style.display = 'none';
-  document.getElementById('out-body').innerHTML = '<div class="preview-wrap" id="stream-el"><em style="color:var(--muted)">Starting…</em></div>';
+  const name = val('c-name');
+  if (!name && !silent) { toast('Feature name is required','err'); document.getElementById('c-name').focus(); return; }
+  if (!name) return;
 
-  try {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, max_tokens: 8192, stream: true, system: SYSTEM_PROMPT, messages: [{ role: 'user', content: prompt }] }),
-    });
+  const problem = val('c-problem');
 
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      throw new Error(errBody.error?.message || `Server error ${res.status}`);
-    }
+  // Build the markdown
+  const md = [
+    `# ${name} — Product Requirements Document`,
+    ``,
+    `**Version:** ${val('c-version')||'1.0'}  |  **Status:** ${val('c-status')||'Draft'}  |  **Date:** ${today}  |  **Author:** ${val('c-author')||'Product Team'}`,
+    `**Product Area:** ${val('c-area')||'—'}  |  **Priority:** ${val('c-priority')||'P1 – High'}`,
+    ``,
+    `---`,
+    ``,
+    `## 1. Executive Summary`,
+    ``,
+    val('c-summary') || `This document defines the requirements for the **${name}** feature within the Tonik digital banking platform. ${problem ? problem.split('.')[0]+'.' : ''} The goal is to deliver a high-quality, mobile-first experience that addresses this need while meeting Tonik's standards for security, reliability, and customer experience.`,
+    ``,
+    `## 2. Problem Statement`,
+    ``,
+    problem || '_To be defined._',
+    ``,
+    `## 3. Goals & Success Metrics`,
+    ``,
+    `### Business Goals`,
+    ``,
+    bulletList('c-goals'),
+    ``,
+    `### Success Metrics (KPIs)`,
+    ``,
+    parseKPIs('c-kpis'),
+    ``,
+    `## 4. Target Users`,
+    ``,
+    `### Primary Users`,
+    ``,
+    val('c-primary-users') || '_To be defined._',
+    ``,
+    `### Secondary Users`,
+    ``,
+    val('c-secondary-users') || '_Not applicable for v1.0._',
+    ``,
+    `## 5. User Stories`,
+    ``,
+    parseStories('c-stories'),
+    ``,
+    `## 6. Functional Requirements`,
+    ``,
+    `### 6.1 Core Functionality`,
+    ``,
+    parseFuncReq('c-func-req'),
+    ``,
+    `## 7. Non-Functional Requirements`,
+    ``,
+    parseNFR('c-nfr'),
+    ``,
+    `## 8. UX / Design Requirements`,
+    ``,
+    bulletList('c-ux'),
+    ``,
+    `## 9. Technical Considerations`,
+    ``,
+    bulletList('c-tech'),
+    ``,
+    `## 10. Dependencies & Integrations`,
+    ``,
+    parseDeps('c-deps'),
+    ``,
+    `## 11. Out of Scope (v${val('c-version')||'1.0'})`,
+    ``,
+    bulletList('c-oos'),
+    ``,
+    `## 12. Risks & Mitigations`,
+    ``,
+    parseRisks('c-risks'),
+    ``,
+    `## 13. Timeline & Milestones`,
+    ``,
+    parseTimeline('c-timeline'),
+    ``,
+    `## 14. Open Questions`,
+    ``,
+    parseOQ('c-oq'),
+    ``,
+    `## 15. Appendix`,
+    ``,
+    bulletList('c-appendix'),
+    ``,
+    `---`,
+    `*Document maintained by Tonik Product Team. For questions, contact the product owner.*`,
+  ].join('\n');
 
-    const reader = res.body.getReader();
-    const dec = new TextDecoder();
-    let buf = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += dec.decode(value, { stream: true });
-      const lines = buf.split('\n'); buf = lines.pop();
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const d = line.slice(6); if (d === '[DONE]') continue;
-        try {
-          const j = JSON.parse(d);
-          if (j.type === 'content_block_delta' && j.delta?.type === 'text_delta') {
-            S.content += j.delta.text;
-            const el = document.getElementById('stream-el');
-            if (el) el.innerHTML = marked.parse(S.content);
-          }
-        } catch {}
-      }
-    }
-
-    renderOut();
-    document.getElementById('out-actions').style.display = 'flex';
-    toast('PRD generated!', 'success');
-  } catch (e) {
-    const msg = e.message || 'Unknown error';
-    toast('Error: ' + msg, 'error', 8000);
-    document.getElementById('out-body').innerHTML = `
-      <div class="empty-state">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        <div class="empty-title" style="color:var(--danger)">Generation Failed</div>
-        <div style="font-size:12px;background:var(--danger-light);color:var(--danger);padding:10px 14px;border-radius:6px;border:1px solid #fca5a5;font-family:monospace;max-width:460px">${esc(msg)}</div>
-        <div class="empty-sub">Try refreshing the page or switching to a different model.</div>
-      </div>`;
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span id="gen-label">${S.mode === 'create' ? 'Generate PRD' : 'Update PRD'}</span>`;
-    document.getElementById('stream-bar').style.display = 'none';
-  }
+  S.md = md;
+  showOutput();
+  if (!silent) toast('PRD built successfully!','ok');
 }
 
-// ── Prompts ──
-const SYSTEM_PROMPT = `You are a senior product manager at Tonik, a leading digital bank in the Philippines. You write rigorous, thorough, and actionable Product Requirements Documents (PRDs) that engineering, design, and business teams can act on immediately.
-
-Always produce PRDs using this exact Tonik template:
-
----
-# [Feature Name] — Product Requirements Document
-
-**Version:** 1.0  |  **Status:** Draft  |  **Date:** ${new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}  |  **Author:** Product Team
-**Product Area:** [area]  |  **Priority:** [priority]
-
----
-
-## 1. Executive Summary
-[2–3 paragraphs: what this feature is, why it matters now, and what it delivers to the business and customers]
-
-## 2. Problem Statement
-[Clearly state the problem, who is affected, scale of impact, current workarounds and their limitations, and cost of inaction]
-
-## 3. Goals & Success Metrics
-
-### Business Goals
-- [Goal 1]
-
-### Success Metrics (KPIs)
-| Metric | Baseline | Target | Measurement Window |
-|--------|----------|--------|--------------------|
-| | | | |
-
-## 4. Target Users
-
-### Primary Users
-[Persona description]
-
-### Secondary Users
-[If applicable]
-
-## 5. User Stories
-| ID | As a… | I want to… | So that… | Priority |
-|----|-------|-----------|----------|----------|
-| US-01 | | | | P0 |
-
-## 6. Functional Requirements
-
-### 6.1 [Feature Area]
-| ID | Requirement | Priority | Acceptance Criteria |
-|----|-------------|----------|---------------------|
-| FR-01 | | P0 | Given… When… Then… |
-
-## 7. Non-Functional Requirements
-| Category | Requirement | Target |
-|----------|-------------|--------|
-| Performance | API response time | < 2s p95 |
-| Availability | Uptime | 99.9% |
-| Security | Encryption | AES-256 at rest, TLS 1.3 in transit |
-| Scalability | | |
-
-## 8. UX / Design Requirements
-[Screen flows, mobile-first (Android/iOS), accessibility, key UX principles]
-
-## 9. Technical Considerations
-[API integrations, data model changes, third-party dependencies, performance and security constraints]
-
-## 10. Dependencies & Integrations
-| System | Type | Owner | Status |
-|--------|------|-------|--------|
-| Core Banking | REST API | Engineering | Existing |
-
-## 11. Out of Scope (v1.0)
-- [Item 1]
-
-## 12. Risks & Mitigations
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-
-## 13. Timeline & Milestones
-| Milestone | Target Date | Owner |
-|-----------|-------------|-------|
-| PRD sign-off | TBD | PM |
-| Design complete | TBD | Design |
-| Engineering complete | TBD | Engineering |
-| QA complete | TBD | QA |
-| Launch | TBD | PM |
-
-## 14. Open Questions
-| # | Question | Owner | Due |
-|---|----------|-------|-----|
-
-## 15. Appendix
-[References, related documents, glossary]
-
----
-*Document maintained by Tonik Product Team.*
-
-Rules:
-- Always use this full structure — never skip sections
-- Write concrete, testable acceptance criteria (Given/When/Then format)
-- Use real banking/fintech domain knowledge for Tonik (Philippines market, BSP regulations where relevant)
-- Aim for 2000–3500 words — a PRD a team can ship from
-- Make reasonable, well-justified assumptions where input is sparse`;
-
-function makeCreatePrompt(d) {
-  return `Create a complete Tonik PRD for the following feature.
-
-**Feature Name:** ${d.name}
-**Product Area:** ${d.area || 'Not specified'}
-**Priority:** ${d.priority}
-
-**Problem Statement:**
-${d.problem}
-
-**Goals & Success Metrics:**
-${d.goals || 'Not provided — define appropriate KPIs for this banking feature.'}
-
-**Target Users:**
-${d.users || 'Not specified — define appropriate personas.'}
-
-**Key Requirements / Features:**
-${d.requirements || 'Not provided — derive from problem statement.'}
-
-**Technical Context / Constraints:**
-${d.tech || 'Not specified.'}
-
-**Additional Context:**
-${d.context || 'None.'}
-
-Generate the full PRD. Where input is sparse, apply your product management expertise to make reasonable, well-reasoned assumptions for a digital bank serving the Philippines market.`;
+function showOutput() {
+  document.getElementById('oacts').style.display = 'flex';
+  renderOut();
 }
 
-function makeUpdatePrompt(d) {
-  return `Update the following Tonik PRD.
-
-**Update Scope:** ${d.scope === 'full' ? 'Full revision — rewrite entirely with all changes integrated' : 'Targeted — only modify sections explicitly mentioned, preserve everything else'}
-
-**What to Change:**
-${d.changes}
-
-**New Context / Information:**
-${d.context || 'None.'}
-
-**Existing PRD:**
-${d.existing}
-
-Output the complete updated PRD using the same Tonik template. ${d.scope === 'targeted' ? 'Keep all unchanged sections exactly as-is.' : 'Integrate all updates coherently throughout.'} Increment the version number.`;
-}
-
-// ── Actions ──
+// ── Download / copy ──
 function copyMd() {
-  navigator.clipboard.writeText(S.content)
-    .then(() => toast('Copied!', 'success'))
-    .catch(() => toast('Copy failed — try the Download button', 'error'));
+  if (!S.md) return;
+  navigator.clipboard.writeText(S.md)
+    .then(()=>toast('Copied to clipboard','ok'))
+    .catch(()=>toast('Copy failed — use Download instead','err'));
 }
-function downloadMd() {
-  if (!S.content) return;
-  const name = (S.mode === 'create'
-    ? document.getElementById('c-name').value.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-') || 'prd'
-    : 'updated-prd') + '.md';
-  const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(new Blob([S.content], { type: 'text/markdown;charset=utf-8' })),
-    download: name,
-  });
-  a.click(); URL.revokeObjectURL(a.href);
+function dlMd() {
+  if (!S.md) return;
+  const slug = (val('c-name')||'prd').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([S.md],{type:'text/markdown;charset=utf-8'}));
+  a.download = slug+'-prd.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
 }
 
 // ── Toast ──
-function toast(msg, type='info', ms=4000) {
+function toast(msg, type='inf', ms=3500) {
   const d = document.createElement('div');
   d.className = `toast ${type}`;
-  d.innerHTML = `<span>${type==='success'?'✓':type==='error'?'✕':'ℹ'}</span><span>${msg}</span>`;
+  d.innerHTML = `<span>${type==='ok'?'✓':type==='err'?'✕':'ℹ'}</span><span>${msg}</span>`;
   document.getElementById('toasts').appendChild(d);
-  setTimeout(() => d.remove(), ms);
+  setTimeout(()=>d.remove(), ms);
 }
 </script>
 </body>
